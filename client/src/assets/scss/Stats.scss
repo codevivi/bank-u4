@@ -1,0 +1,12 @@
+.info {
+  width: fit-content;
+  color: $dark;
+  font-weight: bold;
+  .info-header {
+    color: $accent;
+    font-weight: bold;
+  }
+  .info-stat {
+    font-size: 1.1em;
+  }
+}

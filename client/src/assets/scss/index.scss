@@ -1,0 +1,22 @@
+@import "./global.scss";
+@import "./App.scss";
+@import "./Header.scss";
+@import "./Accounts.scss";
+@import "./Stats.scss";
+@import "./AddAccount.scss";
+@import "./Footer.scss";
+@import "./Messages.scss";
+@import "./Modal.scss";
+@import "./ConfirmDelete.scss";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  color: $darkest;
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+}
