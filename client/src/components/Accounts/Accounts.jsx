@@ -40,22 +40,11 @@ export default function Accounts() {
         <>
           <Filter setFilterFunc={setFilterFunc} />
 
-          <table className="accounts-table">
-            <thead>
-              <tr>
-                <th>Pavardė</th>
-                <th>Vardas</th>
-                <th>Sąskaitos suma</th>
-                <th>Veiksmai</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {displayAccounts.map((account) => (
-                <OneAccountRow key={account.id} account={account} setDeleteAccountId={setDeleteAccountId} setUpdateAccount={setUpdateAccount} />
-              ))}
-            </tbody>
-          </table>
+          <ul className="accounts-list">
+            {displayAccounts.map((account) => (
+              <OneAccountRow key={account.id} account={account} setDeleteAccountId={setDeleteAccountId} setUpdateAccount={setUpdateAccount} />
+            ))}
+          </ul>
         </>
       )}
       {addAccountModalOpen && <AddAccount setAddAccountModalOpen={setAddAccountModalOpen} setNewAccount={setNewAccount} />}

@@ -4,6 +4,7 @@ import formatCurrency from "../../utils/formatCurrency";
 import { GlobalContext } from "../../Contexts/GlobalCtx";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
 import ConfirmDelete from "./ConfirmDelete";
+import idPlaceholder from "../../assets/images/id-placeholder.png";
 
 export default function OneAccountRow({ account }) {
   const [newAmount, setNewAmount] = useState(null);
@@ -54,56 +55,92 @@ export default function OneAccountRow({ account }) {
     setConfirmDeleteModalOpen(false);
   };
   return (
-    <tr>
-      <td>
-        <span className="mobile-header">Pavardė: </span>
-        {account.surname}
-      </td>
-      <td>
-        <span className="mobile-header">Vardas: </span>
-        {account.name}
-      </td>
-      <td>
-        <span className="mobile-header">Suma: </span>
-        {formatCurrency(Number(account.money))}
-      </td>
-      <td className="td-actions">
-        <div className="edit-actions">
-          <CurrencyInput
-            id="amount"
-            placeholder="Įveskite sumą"
-            suffix=" &euro;"
-            decimalsLimit={2}
-            decimalSeparator="."
-            decimalScale={2}
-            allowDecimals={true}
-            name="amount"
-            allowNegativeValue={false}
-            groupSeparator=","
-            value={newAmount || ""}
-            onValueChange={(value) => changeAmount(value)}></CurrencyInput>
-          <div className="control-box">
-            <button className={`green ${account.promiseId ? "disabled" : ""}`} onClick={addMoneyToAccount}>
-              {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
-              pridėti lėšų
-            </button>
+    <li className="account">
+      <div className="row">
+        <div className="field">
+          <h2>Pavardė: </h2>
+          <p> {account.surname}</p>
+        </div>
+        <div className="field">
+          <h2>Vardas: </h2>
+          <p> {account.name}</p>
+        </div>
+        <div className="field">
+          <h2>Suma: </h2>
+          <p>{formatCurrency(Number(account.money))}</p>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="field document">
+          <h2>Dokumentas</h2>
+          <div>
+            <img src={idPlaceholder} width={100} alt="" />
           </div>
-          <div className="control-box">
-            <button className={`orange ${Number(account.money) < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
-              {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
-              {Number(account.money) < newAmount && <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span>}
-              nuskaičiuoti lėšas
-            </button>
+          <div className="controls">
+            <div className="control-box">
+              <button>Keisti</button>
+            </div>
+            <div className="control-box">
+              <button>Pridėti</button>
+            </div>
+            <div className="control-box">
+              <button className="red">Ištrinti</button>
+            </div>
           </div>
         </div>
-        <div className="control-box">
-          <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={() => setConfirmDeleteModalOpen(true)}>
-            {Number(account.money) > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
-            ištrinti
-          </button>
-          {confirmDeleteModalOpen && <ConfirmDelete close={() => setConfirmDeleteModalOpen(false)} handleDelete={handleDelete} account={account} />}
+      </div>
+      <div className="row">
+        <div className="field money-actions">
+          <h2>Lėšų valdymas</h2>
+          <div className="controls">
+            <CurrencyInput
+              id="amount"
+              placeholder="Įveskite sumą"
+              suffix=" &euro;"
+              decimalsLimit={2}
+              decimalSeparator="."
+              decimalScale={2}
+              allowDecimals={true}
+              name="amount"
+              allowNegativeValue={false}
+              groupSeparator=","
+              value={newAmount || ""}
+              onValueChange={(value) => changeAmount(value)}></CurrencyInput>
+            <div className="control-box">
+              <button className={`green ${account.promiseId ? "disabled" : ""}`} onClick={addMoneyToAccount}>
+                {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
+                pridėti lėšų
+              </button>
+            </div>
+            <div className="control-box">
+              <button className={`orange ${Number(account.money) < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
+                {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
+                {Number(account.money) < newAmount && <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span>}
+                nuskaičiuoti lėšas
+              </button>
+            </div>
+          </div>
         </div>
-      </td>
-    </tr>
+      </div>
+
+      <div className="row">
+        <div className="field account-control">
+          <h2>Sąskaitos valdymas</h2>
+          <div className="controls">
+            <div className="control-box">
+              <button className="orange">Užblokuoti</button>
+            </div>
+            <div className="control-box">
+              <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={() => setConfirmDeleteModalOpen(true)}>
+                {Number(account.money) > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
+                ištrinti
+              </button>
+              {confirmDeleteModalOpen && <ConfirmDelete close={() => setConfirmDeleteModalOpen(false)} handleDelete={handleDelete} account={account} />}
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
   );
 }
