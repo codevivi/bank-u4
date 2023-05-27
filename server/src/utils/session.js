@@ -1,17 +1,21 @@
 import session from "express-session";
-import sessionFileStore from "session-file-store";
-import { SESSION_SECRET, NODE_ENV, SESSION_COOKIE_NAME } from "./config.js";
+import MySQLStore from "express-mysql-session";
+import conn from "./dbConnection.js";
+import { SESSION_SECRET, NODE_ENV, SESSION_COOKIE_NAME, DB_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } from "./config.js";
 
-const FileStore = sessionFileStore(session);
+const sessionStorage = MySQLStore(session);
 
-const fileStoreOptions = {
-  path: "./Data/sessions",
+const storeOptions = {
+  clearExpired: true,
+  expiration: 15 * 60 * 1000, //milliseconds //clears session after that time if cookie max age not set, but cookie stays //if request will reset expiration
+  createDatabaseTable: true,
 };
+const sessionStore = new sessionStorage(storeOptions, conn);
 
 const sessionOptions = {
   name: SESSION_COOKIE_NAME,
   secret: SESSION_SECRET, //this should be stored in env
-  store: new FileStore(fileStoreOptions),
+  store: sessionStore,
   resave: false,
   saveUninitialized: false, //won't save session if not modified
   cookie: {

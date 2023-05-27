@@ -5,8 +5,8 @@ function Filter() {
   const [radioFilter, setRadioFilter] = useState(null);
   const { setFilterFunc } = useContext(AccountsContext);
 
-  const filterWithMoney = (displayAccounts) => displayAccounts.filter((displayAccount) => displayAccount.money > 0);
-  const filterNoMoney = (displayAccounts) => displayAccounts.filter((displayAccount) => !displayAccount.money);
+  const filterWithMoney = (displayAccounts) => displayAccounts.filter((displayAccount) => Number(displayAccount.money) > 0);
+  const filterNoMoney = (displayAccounts) => displayAccounts.filter((displayAccount) => !Number(displayAccount.money));
 
   useEffect(() => {
     switch (radioFilter) {

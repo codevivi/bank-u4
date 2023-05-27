@@ -106,10 +106,10 @@ function useAccounts() {
       return;
     }
     const promiseId = uuid();
-    setAccounts((accounts) => accounts.map((account) => (account.id === updateAccount.old.id ? { ...account, ...updateAccount.new, promiseId } : { ...account }))); //old and new id same
+    setAccounts((accounts) => accounts.map((account) => (account.id === updateAccount.old.id ? { ...account, ...updateAccount.changed, promiseId } : { ...account }))); //old and new id same
 
     axios
-      .put(accountsUrl + "/" + updateAccount.old.id, { account: updateAccount.new, promiseId }, { withCredentials: true })
+      .put(accountsUrl + "/" + updateAccount.old.id, { account: updateAccount.changed, promiseId }, { withCredentials: true })
       .then((res) => {
         if (res.data.type !== "success") {
           throw new Error(res.data.message || "unknown");

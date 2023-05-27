@@ -13,6 +13,7 @@ const app = express();
 app.use(cors({ origin: CLIENT, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(session(sessionOptions));
 
 app.use("/api", authRoute);

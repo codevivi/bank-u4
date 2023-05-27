@@ -36,12 +36,13 @@ export const create = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    await accountsModel.update(req.params.id, req.body.account);
+    const ok = await accountsModel.update(req.params.id, req.body.account);
+    if (!ok) throw new Error("could not update");
     res.status(200).json({
       type: "success",
       message: "OK",
       promiseId: req.body.promiseId,
-      id: req.body.account.id,
+      id: req.params.id,
     });
   } catch (err) {
     res.status(500).json({

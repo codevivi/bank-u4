@@ -25,7 +25,7 @@ export default function OneAccountRow({ account }) {
 
   const addMoneyToAccount = () => {
     if (newAmount !== null) {
-      setUpdateAccount({ old: { ...account }, new: { ...account, money: account.money + Number(newAmount) } });
+      setUpdateAccount({ old: { ...account }, changed: { money: Number(account.money) + Number(newAmount) } });
       addMsg({ type: "success", text: `${formatCurrency(newAmount)} pridėta į sąskaitą (${account.name} ${account.surname}).` });
     }
     setNewAmount(null);
@@ -33,11 +33,11 @@ export default function OneAccountRow({ account }) {
 
   const subtractMoneyFromAccount = () => {
     if (newAmount !== null) {
-      if (account.money - Number(newAmount) < 0) {
+      if (Number(account.money) - Number(newAmount) < 0) {
         addMsg({ type: "error", text: "Pervedimas nepavyko: saskaitoje neužtenka pinigų." });
         return;
       }
-      setUpdateAccount({ old: { ...account }, new: { ...account, money: account.money - Number(newAmount) } });
+      setUpdateAccount({ old: { ...account }, changed: { money: Number(account.money) - Number(newAmount) } });
       addMsg({ type: "success", text: `${formatCurrency(newAmount)} nuskaičiuota iš (${account.name} ${account.surname}).` });
     }
 
@@ -45,7 +45,7 @@ export default function OneAccountRow({ account }) {
   };
 
   const handleDelete = () => {
-    if (account.money > 0) {
+    if (Number(account.money) > 0) {
       addMsg({ type: "error", text: "Sąskaitos kurioje yra pinigų ištrinti negalima." });
       return;
     }
@@ -89,16 +89,16 @@ export default function OneAccountRow({ account }) {
             </button>
           </div>
           <div className="control-box">
-            <button className={`orange ${account.money < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
+            <button className={`orange ${Number(account.money) < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
               {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
-              {account.money < newAmount && <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span>}
+              {Number(account.money) < newAmount && <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span>}
               nuskaičiuoti lėšas
             </button>
           </div>
         </div>
         <div className="control-box">
-          <button className={`red ${account.money > 0 || account.promiseId ? "disabled" : ""}`} onClick={() => setConfirmDeleteModalOpen(true)}>
-            {account.money > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
+          <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={() => setConfirmDeleteModalOpen(true)}>
+            {Number(account.money) > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
             ištrinti
           </button>
           {confirmDeleteModalOpen && <ConfirmDelete close={() => setConfirmDeleteModalOpen(false)} handleDelete={handleDelete} account={account} />}

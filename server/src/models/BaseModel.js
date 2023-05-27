@@ -1,42 +1,60 @@
-import { writeFile, readFile } from "node:fs/promises";
-import { v4 as uuid } from "uuid";
-const DB_PATH = new URL("./../../Data/", import.meta.url).pathname;
+// import { writeFile, readFile } from "node:fs/promises";
+import conn from "../utils/dbConnection.js";
 
 class BaseModel {
-  constructor(fileName) {
-    this.path = DB_PATH + fileName;
+  constructor(tableName) {
+    this.conn = conn;
+    this.tableName = tableName;
   }
+  queryPartsFromObj(object) {
+    const keys = Object.keys(object);
+    const values = Object.values(object);
+    const keysStr = keys.toString();
+    const fieldsWithQuestions = keys.map((key) => `${key} = ?`).join(", ");
+    const valuesAsQuestions = values.map((val) => (val = "?")).join(", ");
+
+    return {
+      fieldsWithQuestions,
+      valuesAsQuestions,
+      keys,
+      keysStr,
+      values,
+    };
+  }
+
   async getAll() {
-    let data = await readFile(this.path, "utf-8");
-    return JSON.parse(data);
+    const sql = `SELECT * from  ${this.tableName}`;
+    const [rows, _] = await this.conn.execute(sql);
+    return rows;
   }
-  async reSaveAll(data) {
-    data = JSON.stringify(data);
-    return await writeFile(this.path, data);
-  }
+
   async add(data) {
-    const all = await this.getAll();
-    const id = uuid();
-    all.push({ ...data, id });
-    await this.reSaveAll(all);
-    return id;
+    const { keysStr, valuesAsQuestions, values } = this.queryPartsFromObj(data);
+    const sql = `INSERT INTO ${this.tableName} (${keysStr}) VALUES(${valuesAsQuestions})`;
+    const [results, _] = await this.conn.execute(sql, values);
+    return results.insertId;
   }
-  async update(id, updateObj) {
-    let all = await this.getAll();
-    all = all.map((item) => {
-      return item.id === id ? { ...item, ...updateObj } : { ...item };
-    });
-    return await this.reSaveAll(all);
+
+  async update(id, data) {
+    const { fieldsWithQuestions, values } = this.queryPartsFromObj(data);
+    const sql = `UPDATE ${this.tableName} SET ${fieldsWithQuestions} WHERE id= ?`;
+    console.log(sql);
+
+    const [results, _] = await this.conn.execute(sql, [...values, id]);
+    return results.affectedRows;
   }
+
   async delete(id) {
-    let all = await this.getAll();
-    all = all.filter((item) => item.id !== id);
-    return await this.reSaveAll(all);
+    const sql = `DELETE FROM ${this.tableName}  WHERE id = ?`;
+
+    const [results, _] = await this.conn.execute(sql, [id]);
+    return results.affectedRows;
   }
 
   async getById(id) {
-    const all = await this.getAll();
-    return all.find((item) => item.id === id);
+    const sql = `SELECT * FROM ${this.tableName} WHERE id = ?`;
+    const [rows, _] = await this.conn.execute(sql, [id]);
+    return rows[0];
   }
 }
 export default BaseModel;

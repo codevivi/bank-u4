@@ -1,31 +1,34 @@
 import BaseModel from "./BaseModel.js";
 
-const ACCOUNTS_DB_FILE_NAME = "accounts.json";
-const USERS_DB_FILE_NAME = "users.json";
-
 class AccountsModel extends BaseModel {
-  constructor(fileName) {
-    super(fileName);
+  constructor(tableName) {
+    super(tableName);
   }
   async getAllAccountsCount() {
-    let data = await this.getAll(this.path, "utf-8");
-    return data.length;
+    const sql = `SELECT COUNT(id) AS recordsCount FROM ${this.tableName}`;
+    const [rows, _] = await this.conn.execute(sql);
+    return rows[0].recordsCount;
   }
   async getTotalMoneyInAllAccounts() {
-    let accounts = await this.getAll(this.path, "utf-8");
-    return accounts.reduce((acc, curr) => acc + curr.money, 0);
+    const sql = `SELECT COALESCE(SUM(money), 0) AS moneySum FROM ${this.tableName}`;
+    const [rows, _] = await this.conn.execute(sql);
+    return rows[0].moneySum;
   }
 }
 
-class UsersModel extends BaseModel {
-  constructor(fileName) {
-    super(fileName);
+class AdminsModel extends BaseModel {
+  constructor(tableName) {
+    super(tableName);
   }
   async getByEmail(email) {
-    const all = await this.getAll();
-    return all.find((item) => item.email === email);
+    const sql = `SELECT * FROM ${this.tableName} WHERE email = ?`;
+    const [rows, _] = await this.conn.execute(sql, [email]);
+    if (rows.length) {
+      return rows[0];
+    }
+    return null;
   }
 }
 
-export const accountsModel = new AccountsModel(ACCOUNTS_DB_FILE_NAME);
-export const usersModel = new UsersModel(USERS_DB_FILE_NAME);
+export const accountsModel = new AccountsModel("accounts");
+export const adminsModel = new AdminsModel("admins");

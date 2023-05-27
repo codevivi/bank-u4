@@ -1,4 +1,4 @@
-import { usersModel } from "../models/allModels.js";
+import { adminsModel } from "../models/allModels.js";
 import { SESSION_COOKIE_NAME } from "../utils/config.js";
 import { comparePassword } from "../utils/crypt.js";
 
@@ -9,7 +9,7 @@ export const login = async (req, res, next) => {
   }
   try {
     const { email, password } = req.body;
-    const user = await usersModel.getByEmail(email);
+    const user = await adminsModel.getByEmail(email);
     if (!user) {
       res.status(401).json({ type: "failure", message: "Vartotojas su šiuo elektroninio pašto adresu nerastas." });
       return;
