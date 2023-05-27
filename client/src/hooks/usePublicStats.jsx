@@ -4,12 +4,11 @@ import { SERVER_BASE_PATH } from "../utils/config";
 
 const URL = SERVER_BASE_PATH + "/stats";
 
-function useStats(addMsg) {
-  const [stats, setStats] = useState(null);
+function usePublicStats(addMsg) {
+  const [publicStats, setPublicStats] = useState(null);
   const [statsUpdateTime, setStatsUpdateTime] = useState(null);
-  // const [message, setMessage] = useState(null);
 
-  const updateStats = useCallback(() => {
+  const updatePublicStats = useCallback(() => {
     setStatsUpdateTime(Date.now());
   }, []);
 
@@ -20,14 +19,14 @@ function useStats(addMsg) {
         if (res.data.type !== "success") {
           throw new Error(res.data.message || "unknown");
         }
-        setStats(res.data.stats);
+        setPublicStats(res.data.stats);
       })
       .catch((e) => {
         addMsg({ type: "error", text: "Serverio klaida, nepavyko gauti statistikos" });
       });
   }, [statsUpdateTime, addMsg]);
 
-  return [stats, updateStats];
+  return [publicStats, updatePublicStats];
 }
 
-export default useStats;
+export default usePublicStats;

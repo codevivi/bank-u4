@@ -1,12 +1,12 @@
 import { createContext } from "react";
 import useMessages from "../hooks/useMessages";
-import useStats from "../hooks/useStats";
+import usePublicStats from "../hooks/usePublicStats";
 
 export const GlobalContext = createContext({});
 
 export function GlobalProvider({ children }) {
   const [messages, addMsg, deleteMsg, deleteAllMsg] = useMessages();
-  const [stats, updateStats] = useStats(addMsg);
+  const [publicStats, updatePublicStats] = usePublicStats(addMsg);
 
   return (
     <GlobalContext.Provider
@@ -15,8 +15,8 @@ export function GlobalProvider({ children }) {
         addMsg: addMsg,
         deleteMsg: deleteMsg,
         deleteAllMsg: deleteAllMsg,
-        stats: stats,
-        updateStats: updateStats,
+        publicStats: publicStats,
+        updatePublicStats: updatePublicStats,
       }}>
       {children}
     </GlobalContext.Provider>

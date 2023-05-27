@@ -14,6 +14,11 @@ class AccountsModel extends BaseModel {
     const [rows, _] = await this.conn.execute(sql);
     return rows[0].moneySum;
   }
+  async getPrivateStats() {
+    const sql = `SELECT (SELECT COUNT(id) FROM ${this.tableName} WHERE money = 0) AS clientsWithNoMoney, (SELECT COUNT(id) FROM ${this.tableName} WHERE money < 0) AS clientsWithNegativeMoney,(SELECT COUNT(id) FROM ${this.tableName} WHERE money > 0) AS clientsWithMoney`;
+    const [rows, _] = await this.conn.execute(sql);
+    return rows[0];
+  }
 }
 
 class AdminsModel extends BaseModel {

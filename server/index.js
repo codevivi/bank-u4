@@ -7,7 +7,7 @@ import { session, sessionOptions } from "./src/utils/session.js";
 import { protectRoute } from "./src/middlewares/protectRoute.js";
 import { authRoute } from "./src/routes/authRoutes.js";
 import { accountsRoute } from "./src/routes/accountsRoutes.js";
-import { stats } from "./src/controllers/statsController.js";
+import { publicStats, privateStats } from "./src/controllers/statsController.js";
 const app = express();
 
 app.use(cors({ origin: CLIENT, credentials: true }));
@@ -17,7 +17,8 @@ app.use(cookieParser());
 app.use(session(sessionOptions));
 
 app.use("/api", authRoute);
-app.get("/api/stats", stats);
+app.get("/api/stats", publicStats);
+app.get("/api/private-stats", privateStats);
 app.use("/api/accounts", protectRoute, accountsRoute);
 app.use(wrongEndPoint);
 

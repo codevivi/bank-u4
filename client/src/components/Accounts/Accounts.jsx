@@ -5,19 +5,20 @@ import { GlobalContext } from "../../Contexts/GlobalCtx";
 import AddAccount from "./AddAccount";
 import OneAccountRow from "./OneAccountRow";
 import Filter from "./Filter";
-import Stats from "./Stats";
+import AllStats from "./AllStats";
 
 export default function Accounts() {
   const [addAccountModalOpen, setAddAccountModalOpen] = useState(false);
-  const { accounts, displayAccounts, setFilterFunc, setNewAccount, setDeleteAccountId, setUpdateAccount, changed } = useContext(AccountsContext);
-  const { stats, updateStats } = useContext(GlobalContext);
+  const { accounts, displayAccounts, setFilterFunc, setNewAccount, setDeleteAccountId, setUpdateAccount, changed, privateStats, updatePrivateStats } = useContext(AccountsContext);
+  const { publicStats, updatePublicStats } = useContext(GlobalContext);
 
   useEffect(() => {
     if (!changed) {
       return;
     }
-    updateStats();
-  }, [changed, updateStats]);
+    updatePublicStats();
+    updatePrivateStats();
+  }, [changed, updatePublicStats, updatePrivateStats]);
 
   if (accounts === null || displayAccounts === null) {
     return (
@@ -30,7 +31,7 @@ export default function Accounts() {
     <section className="accounts">
       <h1>Sąskaitos</h1>
       <div className="top">
-        <Stats stats={stats} />
+        <AllStats publicStats={publicStats} privateStats={privateStats} />
         <button className="open-btn" onClick={() => setAddAccountModalOpen(true)}>
           Pridėti sąskaitą
         </button>

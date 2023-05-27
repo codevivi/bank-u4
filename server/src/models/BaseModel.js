@@ -1,4 +1,3 @@
-// import { writeFile, readFile } from "node:fs/promises";
 import conn from "../utils/dbConnection.js";
 
 class BaseModel {
@@ -38,8 +37,6 @@ class BaseModel {
   async update(id, data) {
     const { fieldsWithQuestions, values } = this.queryPartsFromObj(data);
     const sql = `UPDATE ${this.tableName} SET ${fieldsWithQuestions} WHERE id= ?`;
-    console.log(sql);
-
     const [results, _] = await this.conn.execute(sql, [...values, id]);
     return results.affectedRows;
   }

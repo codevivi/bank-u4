@@ -8,7 +8,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 **Pirmame puslapyje (home) pateikta bendra informacija apie banką**:
 
-- [] klientų skaičius, bendra laikoma suma **ir vidutinė suma sąskaitoje (su dviem skaičiais po kablelio)**.
+- [x] klientų skaičius, bendra laikoma suma **ir vidutinė suma sąskaitoje (su dviem skaičiais po kablelio)**.
 
 - [x] Taip pat patalpinti kažkokie grafiniai elementai, užpildantys puslapį.
 
