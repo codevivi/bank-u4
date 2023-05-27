@@ -13,7 +13,7 @@ Authorization, login, logout functionality, file (id picture) upload.
 
 **Must have [Node.js](https://nodejs.org)** installed
 
-**Must have Maria DB installed ([Link to XAMPP](https://www.apachefriends.org/))** (DB import file will be in repository, NOT YET)
+**Must have Maria DB installed ([Link to XAMPP](https://www.apachefriends.org/))** (DB import files in repository DB-exports folder)
 
 1. Clone the repo
 2. Install client NPM packages : run below command in bank-u4-client directory
@@ -30,7 +30,9 @@ Authorization, login, logout functionality, file (id picture) upload.
 
 4. Add .env file with example.env content in server directory.
 
-5. to start server (will run on [http://localhost:5000](http://localhost:5000)) : run below command in bank-u3 server directory
+5. Create database named bank-u4 and import tables from DB-exports folder;
+
+6. to start server (will run on [http://localhost:5000](http://localhost:5000)) : run below command in bank-u3 server directory
 
    ```sh
    npm start
@@ -42,13 +44,13 @@ Authorization, login, logout functionality, file (id picture) upload.
    npm run dev
    ```
 
-6. to start react application (will run on [http://localhost:3000](http://localhost:3000)) : run below command in bank-u3 client directory
+7. to start react application (will run on [http://localhost:3000](http://localhost:3000)) : run below command in bank-u3 client directory
 
    ```sh
    npm start
    ```
 
-7. Default **login details**: User1 (email: kacius@pele.lt , password: Kacius123); User2 (email: pelius@pele.lt, password: Pelius123);
+8. Default **login details**: User1 (email: kacius@pele.lt , password: Kacius123); User2 (email: pelius@pele.lt, password: Pelius123);
 
 <!-- ![home screen screenshot](./screenshots/home-screenshot.png)
 ![login screen screenshot](./screenshots/login-screenshot.png)
