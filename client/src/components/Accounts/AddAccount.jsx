@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
 import Modal from "../Modal/Modal";
 
 export default function AddAccount({ setAddAccountModalOpen }) {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
+  const documentFile = useRef();
+
   const { setNewAccount } = useContext(AccountsContext);
 
   function controlValidNameAndSurname(val) {
@@ -32,7 +34,7 @@ export default function AddAccount({ setAddAccountModalOpen }) {
     setSurname((surname) => surname.trim());
 
     if (name && surname) {
-      setNewAccount({ name, surname, money: 0 });
+      setNewAccount({ account: { name, surname, money: 0 }, document: documentFile.current.files[0] ? documentFile.current.files[0] : null });
 
       setName("");
       setSurname("");
@@ -53,6 +55,10 @@ export default function AddAccount({ setAddAccountModalOpen }) {
           <div>
             <label htmlFor="surname">Pavardė</label>
             <input id="surname" onChange={handleSurnameChange} required minLength={2} maxLength={30} name="surname" value={surname} type="text" />
+          </div>
+          <div>
+            <label htmlFor="document">Dokumento kopija</label>
+            <input id="document" ref={documentFile} name="document" type="file" accept="image/jpeg" />
           </div>
           <button>Sukurti</button>
         </form>

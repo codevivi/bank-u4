@@ -1,8 +1,14 @@
 import BaseModel from "./BaseModel.js";
 
 class AccountsModel extends BaseModel {
-  constructor(tableName) {
+  constructor(tableName, documentsTableName) {
     super(tableName);
+    this.documentsTableName = documentsTableName;
+  }
+  async getAll() {
+    const sql = `SELECT A.id AS id, A.name AS name, A.surname AS surname, A.money AS money, D.id AS documentId from  ${this.tableName} AS A LEFT JOIN ${this.documentsTableName} AS D ON D.accountId=A.id`;
+    const [rows, _] = await this.conn.execute(sql);
+    return rows;
   }
   async getAllAccountsCount() {
     const sql = `SELECT COUNT(id) AS recordsCount FROM ${this.tableName}`;
@@ -34,6 +40,12 @@ class AdminsModel extends BaseModel {
     return null;
   }
 }
+class DocumentsModel extends BaseModel {
+  constructor(tableName) {
+    super(tableName);
+  }
+}
 
-export const accountsModel = new AccountsModel("accounts");
+export const accountsModel = new AccountsModel("accounts", "documents");
 export const adminsModel = new AdminsModel("admins");
+export const documentsModel = new DocumentsModel("documents");

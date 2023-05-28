@@ -58,24 +58,30 @@ function useAccounts() {
     if (newAccount === null) {
       return;
     }
+    const formData = new FormData();
     const promiseId = uuid();
     //create fake id and display as created, only with blanked edit options
-    setAccounts((accounts) => [...accounts, { ...newAccount, promiseId, id: promiseId }]);
-    setMessage({ type: "success", text: `Kliento (${newAccount.name} ${newAccount.surname}) sąskaita  sėkmingai sukurta.` });
+    setAccounts((accounts) => [...accounts, { ...newAccount.account, promiseId, id: promiseId }]);
+    setMessage({ type: "success", text: `Kliento (${newAccount.account.name} ${newAccount.account.surname}) sąskaita  sėkmingai sukurta.` });
+    formData.append("name", newAccount.account.name);
+    formData.append("surname", newAccount.account.surname);
+    formData.append("promiseId", promiseId);
+    formData.append("document", newAccount.document);
 
     axios
-      .post(accountsUrl, { account: newAccount, promiseId }, { withCredentials: true })
+      // .post(accountsUrl, { account: newAccount.account, promiseId: promiseId, document: newAccount.file }, { withCredentials: true })
+      .post(accountsUrl, formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
       .then((res) => {
         if (res.data.type !== "success") {
           throw new Error(res.data.message || "unknown");
         }
-        setAccounts((accounts) => accounts.map((account) => (account.promiseId === res.data.promiseId ? { ...account, promiseId: null, id: res.data.id } : { ...account })));
+        setAccounts((accounts) => accounts.map((account) => (account.promiseId === res.data.promiseId ? { ...account, promiseId: null, documentId: res.data.documentId, id: res.data.id } : { ...account })));
         setChanged(Date.now());
       })
       .catch((e) => {
         //in case server could not save account, remove account from display
         setAccounts((accounts) => accounts.filter((account) => account.promiseId !== promiseId));
-        setMessage({ type: "error", text: `Atsiprašome, įvyko serverio klaida kuriant sąskaitą (${newAccount.name} ${newAccount.surname})` });
+        setMessage({ type: "error", text: `Atsiprašome, įvyko serverio klaida kuriant sąskaitą (${newAccount.account.name} ${newAccount.account.surname})` });
       });
   }, [newAccount]);
 

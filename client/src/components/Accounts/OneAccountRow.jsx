@@ -75,7 +75,7 @@ export default function OneAccountRow({ account }) {
         <div className="field document">
           <h2>Dokumentas</h2>
           <div>
-            <img src={idPlaceholder} width={100} alt="" />
+            <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt="" />
           </div>
           <div className="controls">
             <div className="control-box">

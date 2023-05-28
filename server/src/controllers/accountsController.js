@@ -1,4 +1,4 @@
-import { accountsModel } from "../models/allModels.js";
+import { accountsModel, documentsModel } from "../models/allModels.js";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -18,11 +18,17 @@ export const getAll = async (req, res, next) => {
 
 export const create = async (req, res, next) => {
   try {
-    const id = await accountsModel.add(req.body.account);
+    const account = { name: req.body.name, surname: req.body.surname };
+    const id = await accountsModel.add(account);
+    let documentId = null;
+    if (req.file) {
+      documentId = await documentsModel.add({ filename: req.file.filename, accountId: id });
+    }
     res.status(200).json({
       type: "success",
       message: "OK",
       promiseId: req.body.promiseId,
+      documentId: documentId,
       id,
     });
   } catch (err) {
