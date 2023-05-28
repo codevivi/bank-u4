@@ -32,7 +32,6 @@
     .row {
       display: flex;
       flex-direction: row;
-
       &:first-child {
         p {
           font-size: 1.5em;
@@ -51,6 +50,7 @@
         flex: 1;
         display: flex;
         gap: 1em;
+        min-height: 4em;
         align-items: center;
         border: 1px solid darken($light, 20%);
         padding: 0.5em;

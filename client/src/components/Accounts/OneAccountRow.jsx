@@ -54,6 +54,11 @@ export default function OneAccountRow({ account }) {
     addMsg({ type: "success", text: `Kliento (${account.surname} ${account.name}) sąskaita sėkmingai panaikinta.` });
     setConfirmDeleteModalOpen(false);
   };
+
+  const handleBlock = () => {
+    setUpdateAccount({ old: { ...account }, changed: { blocked: !account.blocked } });
+  };
+
   return (
     <li className="account">
       <div className="row">
@@ -77,67 +82,78 @@ export default function OneAccountRow({ account }) {
           <div>
             <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt="" />
           </div>
-          <div className="controls">
-            <div className="control-box">
-              <button>Keisti</button>
+
+          {!account.blocked && (
+            <div className="controls">
+              <div className="control-box">
+                <button>Keisti</button>
+              </div>
+              <div className="control-box">
+                <button>Pridėti</button>
+              </div>
+              <div className="control-box">
+                <button className="red">Ištrinti</button>
+              </div>
             </div>
-            <div className="control-box">
-              <button>Pridėti</button>
-            </div>
-            <div className="control-box">
-              <button className="red">Ištrinti</button>
-            </div>
-          </div>
+          )}
         </div>
       </div>
       <div className="row">
         <div className="field money-actions">
           <h2>Lėšų valdymas</h2>
-          <div className="controls">
-            <CurrencyInput
-              id="amount"
-              placeholder="Įveskite sumą"
-              suffix=" &euro;"
-              decimalsLimit={2}
-              decimalSeparator="."
-              decimalScale={2}
-              allowDecimals={true}
-              name="amount"
-              allowNegativeValue={false}
-              groupSeparator=","
-              value={newAmount || ""}
-              onValueChange={(value) => changeAmount(value)}></CurrencyInput>
-            <div className="control-box">
-              <button className={`green ${account.promiseId ? "disabled" : ""}`} onClick={addMoneyToAccount}>
-                {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
-                pridėti lėšų
-              </button>
+          {!account.blocked && (
+            <div className="controls">
+              <CurrencyInput
+                id="amount"
+                placeholder="Įveskite sumą"
+                suffix=" &euro;"
+                decimalsLimit={2}
+                decimalSeparator="."
+                decimalScale={2}
+                allowDecimals={true}
+                name="amount"
+                allowNegativeValue={false}
+                groupSeparator=","
+                value={newAmount || ""}
+                onValueChange={(value) => changeAmount(value)}></CurrencyInput>
+              <div className="control-box">
+                <button className={`green ${account.promiseId ? "disabled" : ""}`} onClick={addMoneyToAccount}>
+                  {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
+                  pridėti lėšų
+                </button>
+              </div>
+              <div className="control-box">
+                <button className={`orange ${Number(account.money) < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
+                  {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
+                  {Number(account.money) < newAmount && <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span>}
+                  nuskaičiuoti lėšas
+                </button>
+              </div>
             </div>
-            <div className="control-box">
-              <button className={`orange ${Number(account.money) < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
-                {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
-                {Number(account.money) < newAmount && <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span>}
-                nuskaičiuoti lėšas
-              </button>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
       <div className="row">
         <div className="field account-control">
           <h2>Sąskaitos valdymas</h2>
+
           <div className="controls">
             <div className="control-box">
-              <button className="orange">Užblokuoti</button>
-            </div>
-            <div className="control-box">
-              <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={() => setConfirmDeleteModalOpen(true)}>
-                {Number(account.money) > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
-                ištrinti
+              <button onClick={handleBlock} className="orange">
+                {account.blocked ? "Atblokuoti" : "Užblokuoti"}
               </button>
-              {confirmDeleteModalOpen && <ConfirmDelete close={() => setConfirmDeleteModalOpen(false)} handleDelete={handleDelete} account={account} />}
             </div>
+
+            {!account.blocked && (
+              <div className="control-box">
+                <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={() => setConfirmDeleteModalOpen(true)}>
+                  {Number(account.money) > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
+                  ištrinti
+                </button>
+                {confirmDeleteModalOpen && <ConfirmDelete close={() => setConfirmDeleteModalOpen(false)} handleDelete={handleDelete} account={account} />}
+              </div>
+            )}
           </div>
         </div>
       </div>

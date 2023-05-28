@@ -43,6 +43,14 @@ export const create = async (req, res, next) => {
 };
 
 export const update = async (req, res, next) => {
+  if (req.body.account.blocked && !req.body.account.blocked !== false) {
+    return res.status(403).json({
+      type: "error",
+      message: "Account blocked",
+      promiseId: req.body.promiseId,
+      id: req.body.account.id,
+    });
+  }
   try {
     const ok = await accountsModel.update(req.params.id, req.body.account);
     if (!ok) throw new Error("could not update");
@@ -62,6 +70,14 @@ export const update = async (req, res, next) => {
   }
 };
 export const remove = async (req, res, next) => {
+  if (req.body.account.blocked && !req.body.account.blocked !== false) {
+    return res.status(403).json({
+      type: "error",
+      message: "Account blocked",
+      promiseId: req.body.promiseId,
+      id: req.body.account.id,
+    });
+  }
   try {
     const file = await documentsModel.getByAccountId(req.params.id);
     if (file) {

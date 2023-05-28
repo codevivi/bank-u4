@@ -6,7 +6,7 @@ class AccountsModel extends BaseModel {
     this.documentsTableName = documentsTableName;
   }
   async getAll() {
-    const sql = `SELECT A.id AS id, A.name AS name, A.surname AS surname, A.money AS money, D.id AS documentId from  ${this.tableName} AS A LEFT JOIN ${this.documentsTableName} AS D ON D.accountId=A.id`;
+    const sql = `SELECT A.id AS id, A.name AS name, A.surname AS surname, A.money AS money, A.blocked AS blocked, D.id AS documentId from  ${this.tableName} AS A LEFT JOIN ${this.documentsTableName} AS D ON D.accountId=A.id`;
     const [rows, _] = await this.conn.execute(sql);
     return rows;
   }
