@@ -21,7 +21,7 @@ class AccountsModel extends BaseModel {
     return rows[0].moneySum;
   }
   async getPrivateStats() {
-    const sql = `SELECT (SELECT COUNT(id) FROM ${this.tableName} WHERE money = 0) AS clientsWithNoMoney, (SELECT COUNT(id) FROM ${this.tableName} WHERE money < 0) AS clientsWithNegativeMoney,(SELECT COUNT(id) FROM ${this.tableName} WHERE money > 0) AS clientsWithMoney`;
+    const sql = `SELECT (SELECT COUNT(id) FROM ${this.tableName} WHERE money = 0) AS clientsWithNoMoney, (SELECT COUNT(id) FROM ${this.tableName} WHERE money < 0) AS clientsWithNegativeMoney,(SELECT COUNT(id) FROM ${this.tableName} WHERE money > 0) AS clientsWithMoney, (SELECT COUNT(id) FROM ${this.tableName} WHERE ${this.tableName}.id NOT IN (SELECT ${this.documentsTableName}.accountId FROM ${this.documentsTableName})) AS clientsWithNoId`;
     const [rows, _] = await this.conn.execute(sql);
     return rows[0];
   }
