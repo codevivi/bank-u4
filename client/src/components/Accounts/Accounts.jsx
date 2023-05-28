@@ -40,9 +40,11 @@ export default function Accounts() {
           <button className="open-btn" onClick={() => setAddAccountModalOpen(true)}>
             Pridėti sąskaitą
           </button>
-          <button className="orange" onClick={handleTax}>
-            Mokesčiai
-          </button>
+          {accounts && accounts.length > 0 && (
+            <button className="orange" onClick={handleTax}>
+              Mokesčiai
+            </button>
+          )}
         </div>
       </div>
       {accounts?.length > 0 && (

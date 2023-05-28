@@ -56,6 +56,7 @@ export default function OneAccountRow({ account }) {
   };
 
   const handleBlock = () => {
+    addMsg({ type: "success", text: `Kliento (${account.surname} ${account.name}) sąskaita ${account.blocked ? "atblokuota" : "užblokuota"}.` });
     setUpdateAccount({ old: { ...account }, changed: { blocked: !account.blocked } });
   };
 
@@ -80,7 +81,7 @@ export default function OneAccountRow({ account }) {
         <div className="field document">
           <h2>Dokumentas</h2>
           <div>
-            <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt="" />
+            <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " " + "dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
           </div>
 
           {!account.blocked && (

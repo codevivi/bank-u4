@@ -37,6 +37,7 @@ function useAccounts() {
         if (res.data.type !== "success") {
           throw new Error(res.data.message || "unknown");
         }
+        setMessage({ type: "success", text: "Mokesčiai nuskaičiuoti" });
         setAccountsUpdateTime(Date.now());
         setChanged(Date.now()); //for stats need to rename
       })
