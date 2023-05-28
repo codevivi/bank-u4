@@ -10,6 +10,12 @@ class AccountsModel extends BaseModel {
     const [rows, _] = await this.conn.execute(sql);
     return rows;
   }
+
+  async updateAllSubtractTax(amount) {
+    const sql = `UPDATE ${this.tableName} SET  money = money-5`;
+    const [results, _] = await this.conn.execute(sql);
+    return results.affectedRows;
+  }
   async getAllAccountsCount() {
     const sql = `SELECT COUNT(id) AS recordsCount FROM ${this.tableName}`;
     const [rows, _] = await this.conn.execute(sql);

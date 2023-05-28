@@ -9,7 +9,7 @@ import AllStats from "./AllStats";
 
 export default function Accounts() {
   const [addAccountModalOpen, setAddAccountModalOpen] = useState(false);
-  const { accounts, displayAccounts, setFilterFunc, setNewAccount, setDeleteAccountId, setUpdateAccount, changed, privateStats, updatePrivateStats } = useContext(AccountsContext);
+  const { accounts, displayAccounts, setFilterFunc, setNewAccount, setDeleteAccountId, setUpdateAccount, changed, privateStats, updatePrivateStats, payTax } = useContext(AccountsContext);
   const { publicStats, updatePublicStats } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -19,6 +19,10 @@ export default function Accounts() {
     updatePublicStats();
     updatePrivateStats();
   }, [changed, updatePublicStats, updatePrivateStats]);
+
+  const handleTax = () => {
+    payTax();
+  };
 
   if (accounts === null || displayAccounts === null) {
     return (
@@ -32,9 +36,14 @@ export default function Accounts() {
       <h1>Sąskaitos</h1>
       <div className="top">
         <AllStats publicStats={publicStats} privateStats={privateStats} />
-        <button className="open-btn" onClick={() => setAddAccountModalOpen(true)}>
-          Pridėti sąskaitą
-        </button>
+        <div>
+          <button className="open-btn" onClick={() => setAddAccountModalOpen(true)}>
+            Pridėti sąskaitą
+          </button>
+          <button className="orange" onClick={handleTax}>
+            Mokesčiai
+          </button>
+        </div>
       </div>
       {accounts?.length > 0 && (
         <>

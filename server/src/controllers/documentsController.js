@@ -1,6 +1,5 @@
 import path from "path";
 import { documentsModel } from "../models/allModels.js";
-import { BASE_PATH } from "../utils/config.js";
 
 export const documents = async (req, res, next) => {
   try {

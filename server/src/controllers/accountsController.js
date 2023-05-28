@@ -71,7 +71,7 @@ export const remove = async (req, res, next) => {
         }
       });
     }
-    await accountsModel.delete(req.params.id); //documents in db will delete automatically on account delete
+    await accountsModel.delete(req.params.id); //documents in db will delete automatically on account delete (added constrain)
     res.status(200).json({
       type: "success",
       message: "OK",
@@ -80,6 +80,22 @@ export const remove = async (req, res, next) => {
     res.status(500).json({
       type: "error",
       message: "Could not delete account",
+    });
+  }
+};
+export const payTax = async (req, res, next) => {
+  try {
+    const ok = await accountsModel.updateAllSubtractTax(5);
+    if (!ok) throw new Error("could not update");
+    res.status(200).json({
+      type: "success",
+      message: "OK",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      type: "error",
+      message: "Could not update account",
     });
   }
 };

@@ -1,25 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
 import { SERVER_BASE_PATH } from "../utils/config.js";
 
 const accountsUrl = SERVER_BASE_PATH + "/accounts";
+const taxUrl = accountsUrl + "/pay-tax";
 
 function useAccounts() {
   const [accounts, setAccounts] = useState(null);
+  const [accountsUpdateTime, setAccountsUpdateTime] = useState(null);
   const [displayAccounts, setDisplayAccounts] = useState(accounts);
   const [filterFunc, setFilterFunc] = useState(null);
 
   const [newAccount, setNewAccount] = useState(null);
   const [deleteAccount, setDeleteAccount] = useState(null);
   const [updateAccount, setUpdateAccount] = useState(null); //will save object with old(for save if server fails to delete) and new(updated) account
+  const [taxPayTime, setTaxPayTime] = useState(null);
   const [changed, setChanged] = useState(false);
 
   const [message, setMessage] = useState(null);
 
+  const payTax = useCallback(() => {
+    setTaxPayTime(Date.now());
+  }, []);
+
   const sortBySurname = (accounts) => {
     return accounts.sort((a, b) => a.surname.localeCompare(b.surname, "lt", { sensitivity: "base" }));
   };
+  useEffect(() => {
+    if (taxPayTime === null) {
+      return;
+    }
+    axios
+      .get(taxUrl, { withCredentials: true })
+      .then((res) => {
+        if (res.data.type !== "success") {
+          throw new Error(res.data.message || "unknown");
+        }
+        setAccountsUpdateTime(Date.now());
+        setChanged(Date.now()); //for stats need to rename
+      })
+      .catch((e) => {
+        const res = e.response;
+        if (!res || res.status === 500) {
+          setMessage({ type: "error", text: `Atsiprašome, serverio klaida` });
+          return;
+        }
+        if (res.status === 401) {
+          setMessage({ type: "error", text: `Esate neprisijungęs` });
+        }
+      });
+  }, [taxPayTime]);
 
   // get from db
   useEffect(() => {
@@ -41,7 +72,7 @@ function useAccounts() {
           setMessage({ type: "error", text: `Esate neprisijungęs` });
         }
       });
-  }, []);
+  }, [accountsUpdateTime]);
 
   // use sorted and filtered accounts for display if filter function set
   useEffect(() => {
@@ -130,7 +161,7 @@ function useAccounts() {
       });
   }, [updateAccount]);
 
-  return [message, accounts, setAccounts, displayAccounts, setDisplayAccounts, filterFunc, setFilterFunc, setNewAccount, setDeleteAccount, setUpdateAccount, changed];
+  return [message, accounts, setAccounts, displayAccounts, setDisplayAccounts, filterFunc, setFilterFunc, setNewAccount, setDeleteAccount, setUpdateAccount, changed, payTax];
 }
 
 export default useAccounts;
