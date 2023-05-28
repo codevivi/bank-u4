@@ -44,6 +44,14 @@ class DocumentsModel extends BaseModel {
   constructor(tableName) {
     super(tableName);
   }
+  async getByAccountId(accountId) {
+    const sql = `SELECT * FROM ${this.tableName} WHERE accountId = ?`;
+    const [rows, _] = await this.conn.execute(sql, [accountId]);
+    if (rows.length) {
+      return rows[0];
+    }
+    return null;
+  }
 }
 
 export const accountsModel = new AccountsModel("accounts", "documents");

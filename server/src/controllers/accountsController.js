@@ -1,4 +1,6 @@
 import { accountsModel, documentsModel } from "../models/allModels.js";
+import fs from "node:fs";
+import path from "node:path";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -61,7 +63,15 @@ export const update = async (req, res, next) => {
 };
 export const remove = async (req, res, next) => {
   try {
-    await accountsModel.delete(req.params.id);
+    const file = await documentsModel.getByAccountId(req.params.id);
+    if (file) {
+      fs.unlink(path.resolve("uploads", file.filename), (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+    await accountsModel.delete(req.params.id); //documents in db will delete automatically on account delete
     res.status(200).json({
       type: "success",
       message: "OK",
