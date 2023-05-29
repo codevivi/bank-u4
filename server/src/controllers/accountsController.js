@@ -44,7 +44,7 @@ export const create = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   const account = await accountsModel.getById(req.params.id);
-  if (account.blocked && !req.body.account.hasOwnProperty("blocked")) {
+  if (account.blocked && req.account.hasOwnProperty("blocked")) {
     return res.status(403).json({
       type: "error",
       message: "Account blocked",

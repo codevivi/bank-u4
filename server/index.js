@@ -9,6 +9,7 @@ import { authRoute } from "./src/routes/authRoutes.js";
 import { accountsRoute } from "./src/routes/accountsRoutes.js";
 import { publicStats, privateStats } from "./src/controllers/statsController.js";
 import { documents } from "./src/controllers/documentsController.js";
+import { documentsRoute } from "./src/routes/documentsRoutes.js";
 const app = express();
 
 app.use(cors({ origin: CLIENT, credentials: true }));
@@ -22,7 +23,8 @@ app.use("/api", authRoute);
 app.get("/api/stats", publicStats);
 app.get("/api/private-stats", privateStats);
 app.use("/api/accounts", protectRoute, accountsRoute);
-app.use("/api/documents/:id", protectRoute, documents); //to fetch images
+// app.use("/api/documents/:id", protectRoute, documents); //to fetch images
+app.use("/api/documents", protectRoute, documentsRoute);
 app.use(wrongEndPoint);
 
 app.listen(PORT, () => {

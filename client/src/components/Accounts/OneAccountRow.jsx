@@ -5,12 +5,17 @@ import { GlobalContext } from "../../Contexts/GlobalCtx";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
 import ConfirmDelete from "./ConfirmDelete";
 import idPlaceholder from "../../assets/images/id-placeholder.png";
+import ConfirmDeleteDocument from "./ConfirmDeleteDocument";
 
 export default function OneAccountRow({ account }) {
   const [newAmount, setNewAmount] = useState(null);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
+  const [confirmDeleteDocumentModalOpen, setConfirmDocumentDeleteModalOpen] = useState(false);
   const { addMsg } = useContext(GlobalContext);
-  const { setUpdateAccount, setDeleteAccount } = useContext(AccountsContext);
+  const { setUpdateAccount, setDeleteAccount, setDeleteDocument } = useContext(AccountsContext);
+
+  const toggleDeleteDocumentModal = () => setConfirmDocumentDeleteModalOpen((openState) => !openState);
+  const toggleDeleteAccountModal = () => setConfirmDeleteModalOpen((openState) => !openState);
 
   const changeAmount = (value) => {
     if (value) {
@@ -59,6 +64,10 @@ export default function OneAccountRow({ account }) {
     addMsg({ type: "success", text: `Kliento (${account.surname} ${account.name}) sąskaita ${account.blocked ? "atblokuota" : "užblokuota"}.` });
     setUpdateAccount({ old: { ...account }, changed: { blocked: !account.blocked } });
   };
+  const handleDeleteDocument = () => {
+    setDeleteDocument({ id: account.documentId, accountId: account.id });
+    setConfirmDocumentDeleteModalOpen(false);
+  };
 
   return (
     <li className="account">
@@ -89,9 +98,14 @@ export default function OneAccountRow({ account }) {
               <div className="control-box">
                 <button>Pridėti</button>
               </div>
-              <div className="control-box">
-                <button className="red">Ištrinti</button>
-              </div>
+              {account.documentId && (
+                <div className="control-box">
+                  <button onClick={toggleDeleteDocumentModal} className="red">
+                    Ištrinti
+                  </button>
+                  {confirmDeleteDocumentModalOpen && <ConfirmDeleteDocument close={toggleDeleteDocumentModal} account={account} handleDeleteDocument={handleDeleteDocument} />}
+                </div>
+              )}
             </div>
           )}
         </div>

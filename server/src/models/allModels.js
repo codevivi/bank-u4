@@ -58,6 +58,11 @@ class DocumentsModel extends BaseModel {
     }
     return null;
   }
+  // async deleteByAccountId(accountId) {
+  //   const sql = `DELETE FROM ${this.tableName}  WHERE accountId = ?`;
+  //   const [results, _] = await this.conn.execute(sql, [accountId]);
+  //   return results.affectedRows;
+  // }
 }
 
 export const accountsModel = new AccountsModel("accounts", "documents");

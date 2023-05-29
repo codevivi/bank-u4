@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import { SERVER_BASE_PATH } from "../utils/config.js";
 
 const accountsUrl = SERVER_BASE_PATH + "/accounts";
+const documentsUrl = SERVER_BASE_PATH + "/documents";
 const taxUrl = accountsUrl + "/pay-tax";
 
 function useAccounts() {
@@ -14,6 +15,7 @@ function useAccounts() {
 
   const [newAccount, setNewAccount] = useState(null);
   const [deleteAccount, setDeleteAccount] = useState(null);
+  const [deleteDocument, setDeleteDocument] = useState(null);
   const [updateAccount, setUpdateAccount] = useState(null); //will save object with old(for save if server fails to delete) and new(updated) account
   const [taxPayTime, setTaxPayTime] = useState(null);
   const [changed, setChanged] = useState(false);
@@ -163,7 +165,28 @@ function useAccounts() {
       });
   }, [updateAccount]);
 
-  return [message, accounts, setAccounts, displayAccounts, setDisplayAccounts, filterFunc, setFilterFunc, setNewAccount, setDeleteAccount, setUpdateAccount, changed, payTax];
+  useEffect(() => {
+    if (deleteDocument === null) {
+      return;
+    }
+    axios
+      .delete(documentsUrl + "/" + deleteDocument.id + "/" + deleteDocument.accountId, { withCredentials: true })
+      .then((res) => {
+        if (res.data.type !== "success") {
+          throw new Error(res.data.message || "unknown");
+        }
+        console.log(res.data);
+        setAccounts((accounts) => accounts.map((account) => (account.documentId === Number(res.data.id) ? { ...account, documentId: null } : { ...account })));
+        setChanged(Date.now());
+        setMessage({ type: "success", text: `Dokumentas ištrintas` });
+      })
+      .catch((e) => {
+        console.log(e);
+        setMessage({ type: "error", text: `Atsiprašome, įvyko klaida panaikinant dokumentą` });
+      });
+  }, [deleteDocument]);
+
+  return [message, accounts, setAccounts, displayAccounts, setDisplayAccounts, filterFunc, setFilterFunc, setNewAccount, setDeleteAccount, setUpdateAccount, changed, payTax, setDeleteDocument];
 }
 
 export default useAccounts;
