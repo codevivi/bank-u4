@@ -43,3 +43,22 @@ export const removeDocument = async (req, res, next) => {
     });
   }
 };
+
+export const addDocument = async (req, res, next) => {
+  console.log(req.file, req.body);
+  try {
+    let documentId = null;
+    documentId = await documentsModel.add({ filename: req.file.filename, accountId: req.body.accountId });
+    res.status(200).json({
+      type: "success",
+      message: "OK",
+      id: documentId,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      type: "error",
+      message: "Could not save document",
+    });
+  }
+};

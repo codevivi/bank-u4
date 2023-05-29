@@ -6,16 +6,19 @@ import { AccountsContext } from "../../Contexts/AccountsCtx";
 import ConfirmDelete from "./ConfirmDelete";
 import idPlaceholder from "../../assets/images/id-placeholder.png";
 import ConfirmDeleteDocument from "./ConfirmDeleteDocument";
+import AddDocument from "./AddDocument";
 
 export default function OneAccountRow({ account }) {
   const [newAmount, setNewAmount] = useState(null);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
   const [confirmDeleteDocumentModalOpen, setConfirmDocumentDeleteModalOpen] = useState(false);
+  const [addDocumentModalOpen, setAddDocumentModalOpen] = useState(false);
   const { addMsg } = useContext(GlobalContext);
   const { setUpdateAccount, setDeleteAccount, setDeleteDocument } = useContext(AccountsContext);
 
   const toggleDeleteDocumentModal = () => setConfirmDocumentDeleteModalOpen((openState) => !openState);
   const toggleDeleteAccountModal = () => setConfirmDeleteModalOpen((openState) => !openState);
+  const toggleAddDocumentModal = () => setAddDocumentModalOpen((openState) => !openState);
 
   const changeAmount = (value) => {
     if (value) {
@@ -89,15 +92,20 @@ export default function OneAccountRow({ account }) {
       <div className="row">
         <div className="field document">
           <h2>Dokumentas</h2>
-          <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " " + "dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
+          <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
           {!account.blocked && (
             <div className="controls-wrapper">
-              <div className="control-box">
-                <button>Keisti</button>
-              </div>
-              <div className="control-box">
-                <button>Pridėti</button>
-              </div>
+              {account.documentId && (
+                <div className="control-box">
+                  <button>Keisti</button>
+                </div>
+              )}
+              {!account.documentId && (
+                <div className="control-box">
+                  <button onClick={toggleAddDocumentModal}>Pridėti</button>
+                  {addDocumentModalOpen && <AddDocument close={toggleAddDocumentModal} account={account} />}
+                </div>
+              )}
               {account.documentId && (
                 <div className="control-box">
                   <button onClick={toggleDeleteDocumentModal} className="red">
@@ -162,11 +170,11 @@ export default function OneAccountRow({ account }) {
 
             {!account.blocked && (
               <div className="control-box">
-                <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={() => setConfirmDeleteModalOpen(true)}>
+                <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={toggleDeleteAccountModal}>
                   {Number(account.money) > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
                   ištrinti
                 </button>
-                {confirmDeleteModalOpen && <ConfirmDelete close={() => setConfirmDeleteModalOpen(false)} handleDelete={handleDelete} account={account} />}
+                {confirmDeleteModalOpen && <ConfirmDelete close={toggleDeleteAccountModal} handleDelete={handleDelete} account={account} />}
               </div>
             )}
           </div>
