@@ -43,7 +43,7 @@ export const create = async (req, res, next) => {
 };
 
 export const update = async (req, res, next) => {
-  if (req.body.account.blocked && !req.body.account.blocked !== false) {
+  if (req.body.account.blocked) {
     return res.status(403).json({
       type: "error",
       message: "Account blocked",
@@ -70,7 +70,8 @@ export const update = async (req, res, next) => {
   }
 };
 export const remove = async (req, res, next) => {
-  if (req.body.account.blocked && !req.body.account.blocked !== false) {
+  const account = await accountsModel.getById(req.params.id);
+  if (account.blocked) {
     return res.status(403).json({
       type: "error",
       message: "Account blocked",
@@ -93,6 +94,7 @@ export const remove = async (req, res, next) => {
       message: "OK",
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       type: "error",
       message: "Could not delete account",

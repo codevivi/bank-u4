@@ -133,6 +133,7 @@ function useAccounts() {
         setChanged(Date.now());
       })
       .catch((e) => {
+        console.log(e);
         setAccounts((accounts) => [...accounts, { ...deleteAccount }]);
         setMessage({ type: "error", text: `Atsiprašome, įvyko klaida panaikinant sąskaitą (${deleteAccount.name} ${deleteAccount.surname})` });
       });
