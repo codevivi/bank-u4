@@ -55,7 +55,7 @@ export default function AddAccount({ setAddAccountModalOpen }) {
           <input id="surname" onChange={handleSurnameChange} required minLength={2} maxLength={30} name="surname" value={surname} type="text" />
         </div>
         <div>
-          <label htmlFor="document">Įkelti dokumento kopią jpeg formatu</label>
+          <label htmlFor="document">Įkelti dokumento kopiją jpeg formatu</label>
           <input id="document" ref={documentFile} name="document" type="file" accept="image/jpeg" />
         </div>
         <button>Sukurti</button>
