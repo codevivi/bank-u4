@@ -4,47 +4,62 @@
   top: 0;
   left: 0;
   right: 0;
-
-  padding: 1em;
   padding-top: 5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: auto;
   background-color: rgba($accent, 0.7);
   text-align: center;
-  .main {
+  .modal-box {
     width: fit-content;
+    max-width: 100%;
+    height: fit-content;
+    max-height: fit-content;
     padding: 2em;
-    min-height: fit-content;
-    max-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    padding-top: 3em;
     margin: auto;
-    margin-top: 6em;
     position: relative;
     background-color: $dark;
     border-radius: 5px;
-  }
-  .close-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: transparent;
-    box-shadow: none;
-    color: $light;
-    border: none;
-    font-size: 32px;
-  }
-  .close-btn:focus,
-  .close-btn:hover {
-    color: $accent;
-  }
-}
-@media screen and (max-width: 1000px) {
-  .add-account {
-    .main {
-      max-width: 300px;
+    h2 {
+      width: 100%;
+      max-width: 80%;
+      text-align: center;
+      padding-bottom: 1em;
+      color: $light;
+      margin: auto;
+      &.red {
+        color: $red;
+      }
+      &.green {
+        color: $green;
+      }
+      &.orange {
+        color: $orange;
+      }
+    }
+    .close-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.2em;
+      background-color: transparent;
+      box-shadow: none;
+      color: $light;
+      border: none;
+      font-size: 32px;
+      cursor: pointer;
+    }
+    .close-btn:focus,
+    .close-btn:hover {
+      color: $accent;
+    }
+    .modal-content {
+      background-color: $light;
       padding: 1em;
+      border-radius: 5px;
+      max-height: fit-content;
     }
   }
 }

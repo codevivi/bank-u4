@@ -25,7 +25,7 @@
           a,
           button {
             text-transform: uppercase;
-            padding: 0.5em 1em;
+            padding: 0.3em 1em;
             border: 2px solid $accent;
             min-height: fit-content;
             color: $accent;
@@ -65,7 +65,11 @@
     text-shadow: 0.5px 0.5px 1px $dark;
     font-weight: bold;
     color: $accent;
-    font-size: 24px;
+    font-size: 22px;
+
+    @media screen and (max-width: 800px) {
+      font-size: 16px;
+    }
     img {
       width: 2.5em;
       height: 2.5em;

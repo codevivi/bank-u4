@@ -16,7 +16,7 @@ a {
   font-size: inherit;
 }
 
-button {
+button:not(.close-btn) {
   font-size: 12px;
   font-weight: bold;
   min-height: 3em;

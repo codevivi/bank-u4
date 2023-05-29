@@ -22,7 +22,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [] Puslapio viršuje atvaizduojama statistika: klientų skaičius ir bendra laikoma suma. **Klientų, kurie neturi paveiksliukų su asmens dokumentu. Klientų skaičius, kurių sąskaitos nulinės, klientų skaičius, kurių sąskaitos minusinės, klientų skaičius, kurių sąskaitose yra pinigų.**
 
-- [] **Rodomas mygtukas, "mokesčiai", kur5 paspaudus nuo visų (ir blokuotų) sąskaitų yra nuskaičiuojamas 5 eur mokestis. Jeigu sąskaitoje nėra tiek pinigų, sąskaita tampa minusinė**
+- [x] **Rodomas mygtukas, "mokesčiai", kur5 paspaudus nuo visų (ir blokuotų) sąskaitų yra nuskaičiuojamas 5 eur mokestis. Jeigu sąskaitoje nėra tiek pinigų, sąskaita tampa minusinė**
 
 - [] **Rodomas filtras, kuris filtruoja blokuotas, neblokuotas**, nulines, **minusines** ir pliusines sąskaitas
 
@@ -40,7 +40,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [x] Sąskaitoje likusi suma negali būti minusinė. Rodomas klaidos pranešimas bandant nuskaičiuoti daugiau nei yra.
 
-- [] Duomenų bazė - Express serveris su **MariaDB arba MySQ**.
+- [x] Duomenų bazė - Express serveris su **MariaDB arba MySQ**.
 
 - [x] Po kiekvienos įrašymo (trynimo) operacijos turi būti parodomas pranešimas apie operacijos rezultatus.
 
@@ -50,7 +50,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [x] meniu neturi.
 
-- [] Vartotojai (vardas ir slaptažodžio hash) rankiniu būdu surašyti **surašyti į MariaDB arba MySQL duomenų bazę** veikiančią Express serveryje. (Kacius, kacius@pele.lt : Kacius123; Pelius, pelius@pele.lt:Pelius123).
+- [x] Vartotojai (vardas ir slaptažodžio hash) rankiniu būdu surašyti **surašyti į MariaDB arba MySQL duomenų bazę** veikiančią Express serveryje. (Kacius, kacius@pele.lt : Kacius123; Pelius, pelius@pele.lt:Pelius123).
 
 - [x] Meniu keičiasi priklausomai ar puslapyje yra prisijungęs vartotojas ar ne. Prisijungusiam vartotojui meniu yra rodomas atsijungimo mygtukas ir jo vardas, o neprisijungusiam- linkas į prisijungimo puslapį.
 

@@ -36,7 +36,7 @@ export default function Accounts() {
       <h1>Sąskaitos</h1>
       <div className="top">
         <AllStats publicStats={publicStats} privateStats={privateStats} />
-        <div>
+        <div className="buttons">
           <button className="open-btn" onClick={() => setAddAccountModalOpen(true)}>
             Pridėti sąskaitą
           </button>

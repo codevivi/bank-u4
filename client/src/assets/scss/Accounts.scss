@@ -6,6 +6,7 @@
   .top {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     padding: 1em;
     align-items: center;
     justify-content: space-between;
@@ -14,6 +15,10 @@
     border-top: 5px solid $accent;
     background-color: $light;
     box-shadow: 1px 1px 3px rgba($darkest, 0.4);
+    .buttons {
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
   }
 }
 .accounts-list {
@@ -37,12 +42,18 @@
           font-size: 1.5em;
         }
 
-        @media screen and (max-width: 1135px) {
+        @media screen and (max-width: 600px) {
           flex-direction: column;
           align-items: stretch;
           .field {
             display: flex;
             width: 100%;
+            position: relative;
+            .currency-input {
+              position: absolute;
+              bottom: 0;
+              left: 0;
+            }
           }
         }
       }
@@ -56,8 +67,10 @@
         padding: 0.5em;
         width: 20%;
 
-        h2 {
+        > h2 {
           font-size: 1em;
+          color: lighten($dark, 40%);
+          font-weight: normal;
         }
         &.money-actions {
           display: inline-flex;
@@ -75,34 +88,28 @@
             background-color: white;
           }
         }
-        &.account-control,
-        &.document {
-          display: inline-flex;
-          gap: 1em;
-
-          @media screen and (max-width: 1135px) {
-            display: flex;
-            flex-wrap: wrap;
-          }
-        }
       }
     }
   }
 }
-.controls {
-  display: inline-flex;
-  flex: 1;
-  justify-content: flex-end;
+.controls-wrapper {
   gap: 0.5em;
-
-  @media screen and (max-width: 1135px) {
+  align-items: center;
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: fit-content;
+  max-width: fit-content;
+  margin-left: auto;
+  justify-items: flex-end;
+  @media screen and (max-width: 800px) {
     flex-direction: column;
     align-items: flex-end;
   }
   .control-box {
-    width: fit-content;
-    justify-self: flex-end;
-    button {
+    position: relative;
+
+    button:not(.close-btn) {
       min-width: 13em;
       .inline-msg {
         display: none;
@@ -110,8 +117,7 @@
     }
     &:hover {
       position: relative;
-      font-size: 0.8rem;
-      .inline-msg {
+      button .inline-msg {
         height: auto;
         display: block;
         width: max-content;
@@ -124,6 +130,7 @@
         color: $dark;
         top: -60%;
         right: 0;
+        font-size: 0.9em;
         &.red {
           color: $red;
         }

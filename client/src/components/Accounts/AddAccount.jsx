@@ -44,25 +44,22 @@ export default function AddAccount({ setAddAccountModalOpen }) {
   }
 
   return (
-    <Modal close={() => setAddAccountModalOpen(false)}>
-      <div className="add-account">
-        <h2>Sukurti naują sąskaitą</h2>
-        <form onSubmit={handleForm} className="add-account-form">
-          <div>
-            <label htmlFor="name">Vardas</label>
-            <input id="name" autoFocus onChange={handleNameChange} required minLength={2} maxLength={30} name="name" value={name} type="text" />
-          </div>
-          <div>
-            <label htmlFor="surname">Pavardė</label>
-            <input id="surname" onChange={handleSurnameChange} required minLength={2} maxLength={30} name="surname" value={surname} type="text" />
-          </div>
-          <div>
-            <label htmlFor="document">Dokumento kopija</label>
-            <input id="document" ref={documentFile} name="document" type="file" accept="image/jpeg" />
-          </div>
-          <button>Sukurti</button>
-        </form>
-      </div>
+    <Modal close={() => setAddAccountModalOpen(false)} title={"Sukurti naują sąskaitą"}>
+      <form onSubmit={handleForm} className="add-account">
+        <div>
+          <label htmlFor="name">Vardas</label>
+          <input id="name" autoFocus onChange={handleNameChange} required minLength={2} maxLength={30} name="name" value={name} type="text" />
+        </div>
+        <div>
+          <label htmlFor="surname">Pavardė</label>
+          <input id="surname" onChange={handleSurnameChange} required minLength={2} maxLength={30} name="surname" value={surname} type="text" />
+        </div>
+        <div>
+          <label htmlFor="document">Įkelti dokumento kopią jpeg formatu</label>
+          <input id="document" ref={documentFile} name="document" type="file" accept="image/jpeg" />
+        </div>
+        <button>Sukurti</button>
+      </form>
     </Modal>
   );
 }

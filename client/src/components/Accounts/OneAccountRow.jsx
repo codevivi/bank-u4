@@ -80,12 +80,9 @@ export default function OneAccountRow({ account }) {
       <div className="row">
         <div className="field document">
           <h2>Dokumentas</h2>
-          <div>
-            <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " " + "dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
-          </div>
-
+          <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " " + "dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
           {!account.blocked && (
-            <div className="controls">
+            <div className="controls-wrapper">
               <div className="control-box">
                 <button>Keisti</button>
               </div>
@@ -103,20 +100,23 @@ export default function OneAccountRow({ account }) {
         <div className="field money-actions">
           <h2>Lėšų valdymas</h2>
           {!account.blocked && (
-            <div className="controls">
-              <CurrencyInput
-                id="amount"
-                placeholder="Įveskite sumą"
-                suffix=" &euro;"
-                decimalsLimit={2}
-                decimalSeparator="."
-                decimalScale={2}
-                allowDecimals={true}
-                name="amount"
-                allowNegativeValue={false}
-                groupSeparator=","
-                value={newAmount || ""}
-                onValueChange={(value) => changeAmount(value)}></CurrencyInput>
+            <div className="controls-wrapper">
+              <div className="control-box">
+                <CurrencyInput
+                  className="currency-input"
+                  id="amount"
+                  placeholder="Įveskite sumą"
+                  suffix=" &euro;"
+                  decimalsLimit={2}
+                  decimalSeparator="."
+                  decimalScale={2}
+                  allowDecimals={true}
+                  name="amount"
+                  allowNegativeValue={false}
+                  groupSeparator=","
+                  value={newAmount || ""}
+                  onValueChange={(value) => changeAmount(value)}></CurrencyInput>
+              </div>
               <div className="control-box">
                 <button className={`green ${account.promiseId ? "disabled" : ""}`} onClick={addMoneyToAccount}>
                   {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
@@ -139,7 +139,7 @@ export default function OneAccountRow({ account }) {
         <div className="field account-control">
           <h2>Sąskaitos valdymas</h2>
 
-          <div className="controls">
+          <div className="controls-wrapper">
             <div className="control-box">
               <button onClick={handleBlock} className="orange">
                 {account.blocked ? "Atblokuoti" : "Užblokuoti"}
