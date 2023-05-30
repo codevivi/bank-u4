@@ -9,12 +9,13 @@ import { authRoute } from "./src/routes/authRoutes.js";
 import { accountsRoute } from "./src/routes/accountsRoutes.js";
 import { publicStats, privateStats } from "./src/controllers/statsController.js";
 import { documentsRoute } from "./src/routes/documentsRoutes.js";
+import multer from "multer";
 const app = express();
 
 app.use(cors({ origin: CLIENT, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(urlencoded({ extended: false }));
+app.use(urlencoded({ extended: true }));
 
 app.use(session(sessionOptions));
 

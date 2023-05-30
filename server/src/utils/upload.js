@@ -12,10 +12,17 @@ const storageOptions = {
     next(null, UPLOADS_DIR);
   },
   filename: (req, file, next) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9); //one billion
-    const nameParts = file.originalname.split(".");
-    const extension = nameParts[nameParts.length - 1];
-    next(null, uniqueSuffix + "." + extension);
+    let name;
+    if (req.session.filename) {
+      name = req.session.filename; //just save name from previous middleware, and clear from session
+      req.session.filename = null;
+    } else {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9); //one billion
+      const nameParts = file.originalname.split(".");
+      const extension = nameParts[nameParts.length - 1];
+      name = uniqueSuffix + "." + extension;
+    }
+    next(null, name);
   },
 };
 

@@ -7,18 +7,23 @@ import ConfirmDelete from "./ConfirmDelete";
 import idPlaceholder from "../../assets/images/id-placeholder.png";
 import ConfirmDeleteDocument from "./ConfirmDeleteDocument";
 import AddDocument from "./AddDocument";
+import EditDocument from "./EditDocument";
 
 export default function OneAccountRow({ account }) {
   const [newAmount, setNewAmount] = useState(null);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
   const [confirmDeleteDocumentModalOpen, setConfirmDocumentDeleteModalOpen] = useState(false);
   const [addDocumentModalOpen, setAddDocumentModalOpen] = useState(false);
+  const [editDocumentModalOpen, setEditDocumentModalOpen] = useState(false);
+  const [imgUpdateTime, setImgUpdateTime] = useState(null);
   const { addMsg } = useContext(GlobalContext);
   const { setUpdateAccount, setDeleteAccount, setDeleteDocument } = useContext(AccountsContext);
 
   const toggleDeleteDocumentModal = () => setConfirmDocumentDeleteModalOpen((openState) => !openState);
   const toggleDeleteAccountModal = () => setConfirmDeleteModalOpen((openState) => !openState);
   const toggleAddDocumentModal = () => setAddDocumentModalOpen((openState) => !openState);
+  const toggleEditDocumentModal = () => setEditDocumentModalOpen((openState) => !openState);
+  const updateImg = () => setImgUpdateTime(Date.now());
 
   const changeAmount = (value) => {
     if (value) {
@@ -67,9 +72,9 @@ export default function OneAccountRow({ account }) {
     addMsg({ type: "success", text: `Kliento (${account.surname} ${account.name}) sąskaita ${account.blocked ? "atblokuota" : "užblokuota"}.` });
     setUpdateAccount({ old: { ...account }, changed: { blocked: !account.blocked } });
   };
+
   const handleDeleteDocument = () => {
     setDeleteDocument({ id: account.documentId, accountId: account.id });
-    // setConfirmDocumentDeleteModalOpen(false);
     toggleDeleteDocumentModal();
   };
 
@@ -93,12 +98,13 @@ export default function OneAccountRow({ account }) {
       <div className="row">
         <div className="field document">
           <h2>Dokumentas</h2>
-          <img src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
+          <img key={imgUpdateTime} src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
           {!account.blocked && (
             <div className="controls-wrapper">
               {account.documentId && (
                 <div className="control-box">
-                  <button>Keisti</button>
+                  <button onClick={toggleEditDocumentModal}>Keisti</button>
+                  {editDocumentModalOpen && <EditDocument close={toggleEditDocumentModal} account={account} updateImg={updateImg} />}
                 </div>
               )}
               {!account.documentId && (

@@ -2,7 +2,7 @@
 
 ## 📋 About
 
-2023-05-29 assignment
+2023-06-05 assignment
 
 This is 3 page react application with express server and Maria db.
 Authorization, login, logout functionality, file (id picture) upload.

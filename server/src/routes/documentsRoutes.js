@@ -1,12 +1,11 @@
 import express from "express";
 import upload from "../utils/upload.js";
+import { documents, removeFileFromFs, updateDocument, removeDocument, addDocument } from "../controllers/documentsController.js";
 const router = express.Router();
-import { documents, removeDocument, addDocument } from "../controllers/documentsController.js";
 
 router.get("/:id", documents);
 router.post("", upload.single("document"), addDocument);
-// router.put("/:id", update);
+router.put("/:id", removeFileFromFs, upload.single("document"), updateDocument);
 router.delete("/:id/:accountId", removeDocument);
-// router.get("/pay-tax", payTax);
 
 export const documentsRoute = router;

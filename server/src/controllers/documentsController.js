@@ -45,7 +45,6 @@ export const removeDocument = async (req, res, next) => {
 };
 
 export const addDocument = async (req, res, next) => {
-  console.log(req.file, req.body);
   try {
     let documentId = null;
     documentId = await documentsModel.add({ filename: req.file.filename, accountId: req.body.accountId });
@@ -55,10 +54,38 @@ export const addDocument = async (req, res, next) => {
       id: documentId,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       type: "error",
       message: "Could not save document",
     });
   }
+};
+/// this is middleware but left there as it needs to access documents model;
+export const removeFileFromFs = async (req, res, next) => {
+  try {
+    let document = null;
+    document = await documentsModel.getById(req.params.id);
+    req.session.filename = document.filename; //as want to use same name for new upload
+    fs.unlink(path.resolve("uploads", document.filename), (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    next();
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      type: "error",
+      message: "Could not find document",
+    });
+  }
+};
+
+export const updateDocument = async (req, res, next) => {
+  res.status(200).json({
+    type: "success",
+    message: "OK",
+    accountId: req.body.accountId,
+    id: req.body.id,
+  });
 };
