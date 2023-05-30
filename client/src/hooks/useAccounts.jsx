@@ -29,6 +29,13 @@ function useAccounts() {
   const sortBySurname = (accounts) => {
     return accounts.sort((a, b) => a.surname.localeCompare(b.surname, "lt", { sensitivity: "base" }));
   };
+
+  const modifyOneAccount = useCallback((modified) => {
+    setAccounts((prev) => {
+      return prev.map((acc) => (acc.id === modified.id ? { ...acc, ...modified } : acc));
+    });
+  }, []);
+
   useEffect(() => {
     if (taxPayTime === null) {
       return;
@@ -186,7 +193,7 @@ function useAccounts() {
       });
   }, [deleteDocument]);
 
-  return [message, accounts, setAccounts, displayAccounts, setDisplayAccounts, filterFunc, setFilterFunc, setNewAccount, setDeleteAccount, setUpdateAccount, changed, payTax, setDeleteDocument];
+  return [message, accounts, setAccounts, displayAccounts, setDisplayAccounts, filterFunc, setFilterFunc, setNewAccount, setDeleteAccount, setUpdateAccount, changed, payTax, setDeleteDocument, modifyOneAccount];
 }
 
 export default useAccounts;

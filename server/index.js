@@ -8,7 +8,6 @@ import { protectRoute } from "./src/middlewares/protectRoute.js";
 import { authRoute } from "./src/routes/authRoutes.js";
 import { accountsRoute } from "./src/routes/accountsRoutes.js";
 import { publicStats, privateStats } from "./src/controllers/statsController.js";
-import { documents } from "./src/controllers/documentsController.js";
 import { documentsRoute } from "./src/routes/documentsRoutes.js";
 const app = express();
 

@@ -69,7 +69,8 @@ export default function OneAccountRow({ account }) {
   };
   const handleDeleteDocument = () => {
     setDeleteDocument({ id: account.documentId, accountId: account.id });
-    setConfirmDocumentDeleteModalOpen(false);
+    // setConfirmDocumentDeleteModalOpen(false);
+    toggleDeleteDocumentModal();
   };
 
   return (

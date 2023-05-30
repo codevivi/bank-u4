@@ -9,7 +9,7 @@ const url = SERVER_BASE_PATH + "/documents";
 export default function AddDocument({ close, account }) {
   const documentFile = useRef();
   const [newDocument, setNewDocument] = useState(null);
-  const { setAccounts } = useContext(AccountsContext);
+  const { modifyOneAccount } = useContext(AccountsContext);
   const { addMsg } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -25,30 +25,31 @@ export default function AddDocument({ close, account }) {
         if (res.data.type !== "success") {
           throw new Error(res.data.message || "unknown");
         }
-        setAccounts((accounts) => accounts.map((acc) => (acc.id === account.id ? { ...acc, documentId: res.data.id } : { ...acc })));
-        addMsg({ type: "success", text: `Kliento (${account.name} ${account.surname}) dokumentas pridėtas.` });
+        modifyOneAccount({ id: newDocument.accountId, documentId: res.data.id });
+        addMsg({ type: "success", text: `Dokumentas pridėtas.` });
+        close();
       })
       .catch((e) => {
         console.log(e);
-        addMsg({ type: "error", text: `Atsiprašome, įvyko serverio klaida pridedant dokumentą (${account.name} ${account.surname})` });
+        addMsg({ type: "error", text: `Atsiprašome, įvyko serverio klaida pridedant dokumentą` });
+        close();
       });
-  }, [newDocument]);
+  }, [newDocument, addMsg, modifyOneAccount, close]);
 
   function handleForm(e) {
     e.preventDefault();
     setNewDocument({ accountId: account.id, file: documentFile.current.files[0] });
-    // close();
     return;
   }
 
   return (
-    <Modal close={close} title={"Sukurti naują sąskaitą"}>
+    <Modal close={close} title={"Pridėti dokumentą"}>
       <form onSubmit={handleForm} className="add-account">
         <div>
           <label htmlFor="document">Įkelti dokumento kopiją jpeg formatu</label>
           <input id="document" ref={documentFile} name="document" type="file" accept="image/jpeg" />
         </div>
-        <button>Sukurti</button>
+        <button>Pridėti</button>
       </form>
     </Modal>
   );
