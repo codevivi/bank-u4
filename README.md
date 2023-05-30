@@ -32,7 +32,7 @@ Authorization, login, logout functionality, file (id picture) upload.
 
 5. Create database named bank-u4 and import tables from DB-exports folder;
 
-6. to start server (will run on [http://localhost:5000](http://localhost:5000)) : run below command in bank-u3 server directory
+6. to start server (will run on [http://localhost:5000](http://localhost:5000)) : run below command in bank-u4 server directory
 
    ```sh
    npm start
@@ -44,7 +44,7 @@ Authorization, login, logout functionality, file (id picture) upload.
    npm run dev
    ```
 
-7. to start react application (will run on [http://localhost:3000](http://localhost:3000)) : run below command in bank-u3 client directory
+7. to start react application (will run on [http://localhost:3000](http://localhost:3000)) : run below command in bank-u4 client directory
 
    ```sh
    npm start
