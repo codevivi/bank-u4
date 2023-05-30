@@ -56,4 +56,4 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [] **Filtravimas ir rūšiavimas turi veikti kartu, tai yra turi būti galimybė išrūšiuoti jau nufiltruotas sąskaitas ir panašiai**.
 
-- [] **Sąskaita turi būti unikali ir nesikartoti**
+- [x] **Sąskaita turi būti unikali ir nesikartoti** _(tikrinu pagal vardą ir pavardę, nors šiaip žmonių vardai galėtų ir kartotis, bet šiuo atveju daugiau duomenų nėra)_

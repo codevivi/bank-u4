@@ -34,6 +34,13 @@ export const create = async (req, res, next) => {
       id,
     });
   } catch (err) {
+    if (err.message === "Exists") {
+      return res.status(409).json({
+        type: "failure",
+        message: "Account with this name and surname already exists",
+        promiseId: req.body.promiseId,
+      });
+    }
     res.status(500).json({
       type: "error",
       message: "Could not save new account",

@@ -5,6 +5,28 @@ class AccountsModel extends BaseModel {
     super(tableName);
     this.documentsTableName = documentsTableName;
   }
+
+  async add(data) {
+    const { name, surname } = data;
+    const exists = await this.getByNameAndSurname(name, surname);
+    if (exists) {
+      throw new Error("Exists");
+    }
+    const { keysStr, valuesAsQuestions, values } = this.queryPartsFromObj(data);
+    const sql = `INSERT INTO ${this.tableName} (${keysStr}) VALUES(${valuesAsQuestions})`;
+    const [results, _] = await this.conn.execute(sql, values);
+    return results.insertId;
+  }
+
+  async getByNameAndSurname(name, surname) {
+    const sql = `SELECT * FROM ${this.tableName} WHERE name = ? AND surname = ?`;
+    const [rows, _] = await this.conn.execute(sql, [name, surname]);
+    if (rows.length) {
+      return rows[0];
+    }
+    return null;
+  }
+
   async getAll() {
     const sql = `SELECT A.id AS id, A.name AS name, A.surname AS surname, A.money AS money, A.blocked AS blocked, D.id AS documentId from  ${this.tableName} AS A LEFT JOIN ${this.documentsTableName} AS D ON D.accountId=A.id`;
     const [rows, _] = await this.conn.execute(sql);

@@ -122,7 +122,11 @@ function useAccounts() {
       .catch((e) => {
         //in case server could not save account, remove account from display
         setAccounts((accounts) => accounts.filter((account) => account.promiseId !== promiseId));
-        setMessage({ type: "error", text: `Atsiprašome, įvyko serverio klaida kuriant sąskaitą (${newAccount.account.name} ${newAccount.account.surname})` });
+        if (e.response.status === 409) {
+          setMessage({ type: "error", text: `Sąskaia ${newAccount.account.name} ${newAccount.account.surname} jau egzistuoja.` });
+        } else {
+          setMessage({ type: "error", text: `Atsiprašome, įvyko serverio klaida kuriant sąskaitą (${newAccount.account.name} ${newAccount.account.surname})` });
+        }
       });
   }, [newAccount]);
 
