@@ -1,5 +1,5 @@
 import CurrencyInput from "react-currency-input-field";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import formatCurrency from "../../utils/formatCurrency";
 import { GlobalContext } from "../../Contexts/GlobalCtx";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
@@ -8,6 +8,7 @@ import idPlaceholder from "../../assets/images/id-placeholder.png";
 import ConfirmDeleteDocument from "./ConfirmDeleteDocument";
 import AddDocument from "./AddDocument";
 import EditDocument from "./EditDocument";
+import ConfirmLargeSumDeposit from "./ConfirmLargeSumDeposit";
 
 export default function OneAccountRow({ account }) {
   const [newAmount, setNewAmount] = useState(null);
@@ -15,15 +16,35 @@ export default function OneAccountRow({ account }) {
   const [confirmDeleteDocumentModalOpen, setConfirmDocumentDeleteModalOpen] = useState(false);
   const [addDocumentModalOpen, setAddDocumentModalOpen] = useState(false);
   const [editDocumentModalOpen, setEditDocumentModalOpen] = useState(false);
+  const [confirmLargeSumModalOpen, setConfirmLargeSumModalOpen] = useState(false);
   const [imgUpdateTime, setImgUpdateTime] = useState(null);
   const { addMsg } = useContext(GlobalContext);
   const { setUpdateAccount, setDeleteAccount, setDeleteDocument } = useContext(AccountsContext);
+  const [okToAddMoney, setOkToAddMoney] = useState(false);
 
   const toggleDeleteDocumentModal = () => setConfirmDocumentDeleteModalOpen((openState) => !openState);
   const toggleDeleteAccountModal = () => setConfirmDeleteModalOpen((openState) => !openState);
   const toggleAddDocumentModal = () => setAddDocumentModalOpen((openState) => !openState);
   const toggleEditDocumentModal = () => setEditDocumentModalOpen((openState) => !openState);
+  const toggleLargeSumModal = () => setConfirmLargeSumModalOpen((openState) => !openState);
+  const cancelAddMoney = () => {
+    setNewAmount(null);
+    toggleLargeSumModal();
+  };
   const updateImg = () => setImgUpdateTime(Date.now());
+
+  useEffect(() => {
+    if (!okToAddMoney) {
+      return;
+    }
+    setUpdateAccount({ old: { ...account }, changed: { money: Number(account.money) + Number(newAmount) } });
+    addMsg({ type: "success", text: `${formatCurrency(newAmount)} pridėta į sąskaitą (${account.name} ${account.surname}).` });
+    setNewAmount(null);
+    setOkToAddMoney(false);
+    if (confirmLargeSumModalOpen) {
+      toggleLargeSumModal();
+    }
+  }, [okToAddMoney, account, addMsg, newAmount, setUpdateAccount]);
 
   const changeAmount = (value) => {
     if (value) {
@@ -38,11 +59,14 @@ export default function OneAccountRow({ account }) {
   };
 
   const addMoneyToAccount = () => {
-    if (newAmount !== null) {
-      setUpdateAccount({ old: { ...account }, changed: { money: Number(account.money) + Number(newAmount) } });
-      addMsg({ type: "success", text: `${formatCurrency(newAmount)} pridėta į sąskaitą (${account.name} ${account.surname}).` });
+    if (newAmount === null) {
+      return;
     }
-    setNewAmount(null);
+    if (Number(newAmount) > 1000) {
+      toggleLargeSumModal();
+      return;
+    }
+    setOkToAddMoney(true);
   };
 
   const subtractMoneyFromAccount = () => {
@@ -128,6 +152,7 @@ export default function OneAccountRow({ account }) {
       <div className="row">
         <div className="field money-actions">
           <h2>Lėšų valdymas</h2>
+          {confirmLargeSumModalOpen && <ConfirmLargeSumDeposit close={cancelAddMoney} sum={newAmount} account={account} handleConfirm={() => setOkToAddMoney(true)} />}
           {!account.blocked && (
             <div className="controls-wrapper">
               <div className="control-box">

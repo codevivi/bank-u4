@@ -30,7 +30,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [x] Nauja sąskaita sukuriama su pradine 0 suma, o lėšos pridedamos/nuimamos sąraše įvedant sumą ir spaudžiant atitinkamą mygtuką.
 
-- [] **Jeigu pridedama suma yra didesnė nei 1000 eurų turi pasirodyti langas, prašantis patvirtinti sumos pridėjimą (jeigu mažesnė, pridedama iškarto).**
+- [x] **Jeigu pridedama suma yra didesnė nei 1000 eurų turi pasirodyti langas, prašantis patvirtinti sumos pridėjimą (jeigu mažesnė, pridedama iškarto).**
 
 - [x] **Paspaudus mygtuką “užblokuoti”, sąskaita užblokuojama, jokios operacijos, trynimas, pridėjimas, atėmimas su tokia sąskaita negalimos. Blokuotos sąskaitos mygtukas, pakeičiamas mygtuku “atblokuoti”, kurį paspaudus, sąskaita atblokuojama. Rodomas klaidos pranešimas bandant atlikti kažkokią operaciją su blokuota sąskaita.**
 
