@@ -1,19 +1,35 @@
+//action types
 export const SET = 1;
 export const SORT = 2;
 export const FILTER = 3;
 //filters
-export const ALL = "visos";
-export const BLOCKED = "užblokuotos";
-export const UNBLOCKED = "neužblokuotos";
-export const EMPTY = "tuščios";
-export const NEGATIVE = "minusinės";
-export const POSITIVE = "su pinigais";
+const ALL = 10;
+const BLOCKED = 11;
+const UNBLOCKED = 12;
+const EMPTY = 13;
+const NEGATIVE = 14;
+const POSITIVE = 15;
+//sorts
+const UNSORTED = 100;
+const NAME = 101;
+const SURNAME = 102;
+const MONEY = 103;
 
-export const filters = [ALL, BLOCKED, UNBLOCKED, EMPTY, NEGATIVE, POSITIVE];
+export const filters = [
+  { key: ALL, text: "visos" },
+  { key: BLOCKED, text: "užblokuotos" },
+  { key: UNBLOCKED, text: "neužblokuotos" },
+  { key: EMPTY, text: "tuščios" },
+  { key: NEGATIVE, text: "minusinės" },
+  { key: POSITIVE, text: "su pinigais" },
+];
 // //sorts
-export const UNSORTED = "ne rūšiuotos";
-export const NAME = "pagal vardą";
-export const SURNAME = "pagal pavardę";
+export const sorts = [
+  { key: UNSORTED, text: "ne rūšiuotos" },
+  { key: SURNAME, text: "pagal pavardę" },
+  { key: NAME, text: "pagal vardą" },
+  { key: MONEY, text: "pagal sumą" },
+];
 
 export const displayAccountsReducer = (state, action) => {
   let s = state ? [...state] : null;
@@ -59,6 +75,9 @@ export const displayAccountsReducer = (state, action) => {
         break;
       case SURNAME:
         s.sort((a, b) => a.surname.localeCompare(b.surname, "lt", { sensitivity: "base" }));
+        break;
+      case MONEY:
+        s.sort((a, b) => Number(b.money) - Number(a.money));
         break;
       default:
         s.sort((a, b) => a.row - b.row);

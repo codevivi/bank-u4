@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { FILTER, SET, displayAccountsReducer } from "../reducers/displayAccountsReducer.js";
+import { FILTER, SORT, SET, displayAccountsReducer } from "../reducers/displayAccountsReducer.js";
 
 export default function useDisplayAccounts() {
   const [displayAccounts, dispatch] = useReducer(displayAccountsReducer, null);
@@ -10,8 +10,15 @@ export default function useDisplayAccounts() {
     if (filter === null) {
       return;
     }
-    return dispatch({ type: FILTER, filter: filter });
+    return dispatch({ type: FILTER, filter: filter.key });
   }, [filter]);
+
+  useEffect(() => {
+    if (sort === null) {
+      return;
+    }
+    return dispatch({ type: SORT, sort: sort.key });
+  }, [sort]);
 
   const applyFilter = useCallback((changedFilter) => {
     return setFilter(changedFilter);
@@ -22,7 +29,7 @@ export default function useDisplayAccounts() {
 
   const resetDisplayAccounts = useCallback(
     (accounts) => {
-      return dispatch({ type: SET, filter: filter, sort: sort, payload: accounts });
+      return dispatch({ type: SET, filter: filter?.key, sort: sort?.key, payload: accounts });
     },
     [filter, sort]
   );

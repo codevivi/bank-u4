@@ -1,21 +1,21 @@
 import { useContext, useState } from "react";
 import { BiExpandHorizontal } from "react-icons/bi";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
-import { filters } from "../../reducers/displayAccountsReducer.js";
+import { sorts } from "../../reducers/displayAccountsReducer.js";
 
-function Filter() {
+function Sort() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { filter, applyFilter } = useContext(AccountsContext);
+  const { sort, applySort } = useContext(AccountsContext);
 
-  const handleFilterChange = (newFilter) => {
-    return () => applyFilter(newFilter);
+  const handleSortChange = (newSort) => {
+    return () => applySort(newSort);
   };
   return (
     <div className="filters">
       <div className="filter">
         <button className="filter-expand-btn accent" onClick={() => setIsExpanded((is) => !is)}>
-          <span>filtras: </span>
-          <span className="dark">{filter ? filter?.text : "visos"}</span>
+          <span>Rūšiavimas: </span>
+          <span className="dark">{sort ? sort?.text : "Nerūšiuotos"}</span>
           <span className="filter-icon">
             {" "}
             <BiExpandHorizontal />
@@ -23,9 +23,9 @@ function Filter() {
         </button>
         {isExpanded && (
           <div className="filter-selection">
-            {filters.map((f, i) => (
-              <button key={f.key.toString() + i} className={"filter-btn " + (filter?.key === f.key ? "active" : "")} onClick={handleFilterChange(f)}>
-                {f.text}
+            {sorts.map((s, i) => (
+              <button key={i.toString() + s.key} className={"filter-btn " + (sort?.key === s.key ? "active" : "")} onClick={handleSortChange(s)}>
+                {s.text}
               </button>
             ))}
           </div>
@@ -35,4 +35,4 @@ function Filter() {
   );
 }
 
-export default Filter;
+export default Sort;

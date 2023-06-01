@@ -26,7 +26,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [x] **Rodomas filtras, kuris filtruoja blokuotas, neblokuotas**, nulines, **minusines** ir pliusines sąskaitas
 
-- [] **Yra galimybė rūšiuoti sąskaitas pagal pavardę, sumą ir grįžti į pradinį nerūšiuotą variantą.**
+- [x] **Yra galimybė rūšiuoti sąskaitas pagal pavardę, sumą ir grįžti į pradinį nerūšiuotą variantą.**
 
 - [x] Nauja sąskaita sukuriama su pradine 0 suma, o lėšos pridedamos/nuimamos sąraše įvedant sumą ir spaudžiant atitinkamą mygtuką.
 
@@ -36,7 +36,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [x] Sąskaitos, kurioje yra lėšų ištrinti neturi būti galima.
 
-- [] **Sąskaitos pradžioje rodomos niekaip neišrūšiuotos.**
+- [x] **Sąskaitos pradžioje rodomos niekaip neišrūšiuotos.**
 
 - [x] Sąskaitoje likusi suma negali būti minusinė. Rodomas klaidos pranešimas bandant nuskaičiuoti daugiau nei yra.
 

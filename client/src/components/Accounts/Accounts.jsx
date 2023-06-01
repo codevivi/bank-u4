@@ -6,6 +6,7 @@ import AddAccount from "./AddAccount";
 import OneAccountRow from "./OneAccountRow";
 import Filter from "./Filter";
 import AllStats from "./AllStats";
+import Sort from "./Sort";
 
 export default function Accounts() {
   const [addAccountModalOpen, setAddAccountModalOpen] = useState(false);
@@ -50,6 +51,7 @@ export default function Accounts() {
       {accounts?.length > 0 && (
         <>
           <Filter />
+          <Sort />
           <ul className="accounts-list">{displayAccounts.map((account) => (account.show ? <OneAccountRow key={account.id} account={account} setDeleteAccountId={setDeleteAccountId} setUpdateAccount={setUpdateAccount} /> : null))}</ul>
         </>
       )}
