@@ -9,7 +9,7 @@ import AllStats from "./AllStats";
 
 export default function Accounts() {
   const [addAccountModalOpen, setAddAccountModalOpen] = useState(false);
-  const { accounts, displayAccounts, setFilterFunc, setNewAccount, setDeleteAccountId, setUpdateAccount, changed, privateStats, updatePrivateStats, payTax } = useContext(AccountsContext);
+  const { accounts, displayAccounts, setNewAccount, setDeleteAccountId, setUpdateAccount, changed, privateStats, updatePrivateStats, payTax } = useContext(AccountsContext);
   const { publicStats, updatePublicStats } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -49,13 +49,8 @@ export default function Accounts() {
       </div>
       {accounts?.length > 0 && (
         <>
-          <Filter setFilterFunc={setFilterFunc} />
-
-          <ul className="accounts-list">
-            {displayAccounts.map((account) => (
-              <OneAccountRow key={account.id} account={account} setDeleteAccountId={setDeleteAccountId} setUpdateAccount={setUpdateAccount} />
-            ))}
-          </ul>
+          <Filter />
+          <ul className="accounts-list">{displayAccounts.map((account) => (account.show ? <OneAccountRow key={account.id} account={account} setDeleteAccountId={setDeleteAccountId} setUpdateAccount={setUpdateAccount} /> : null))}</ul>
         </>
       )}
       {addAccountModalOpen && <AddAccount setAddAccountModalOpen={setAddAccountModalOpen} setNewAccount={setNewAccount} />}

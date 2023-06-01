@@ -24,7 +24,7 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [x] **Rodomas mygtukas, "mokesčiai", kur5 paspaudus nuo visų (ir blokuotų) sąskaitų yra nuskaičiuojamas 5 eur mokestis. Jeigu sąskaitoje nėra tiek pinigų, sąskaita tampa minusinė**
 
-- [] **Rodomas filtras, kuris filtruoja blokuotas, neblokuotas**, nulines, **minusines** ir pliusines sąskaitas
+- [x] **Rodomas filtras, kuris filtruoja blokuotas, neblokuotas**, nulines, **minusines** ir pliusines sąskaitas
 
 - [] **Yra galimybė rūšiuoti sąskaitas pagal pavardę, sumą ir grįžti į pradinį nerūšiuotą variantą.**
 

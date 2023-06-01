@@ -1,45 +1,36 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import { BiExpandHorizontal } from "react-icons/bi";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
+import { filters } from "../../reducers/displayAccountsReducer.js";
 
 function Filter() {
-  const [radioFilter, setRadioFilter] = useState(null);
-  const { setFilterFunc } = useContext(AccountsContext);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { filter, applyFilter } = useContext(AccountsContext);
 
-  const filterWithMoney = (displayAccounts) => displayAccounts.filter((displayAccount) => Number(displayAccount.money) > 0);
-  const filterNoMoney = (displayAccounts) => displayAccounts.filter((displayAccount) => !Number(displayAccount.money));
-
-  useEffect(() => {
-    switch (radioFilter) {
-      case "with-money":
-        setFilterFunc(() => filterWithMoney);
-        break;
-      case "no-money":
-        setFilterFunc(() => filterNoMoney);
-        break;
-      default:
-        setFilterFunc(() => null);
-    }
-  }, [radioFilter, setFilterFunc]);
-
-  const handleFilterClick = (filter) => {
-    if (radioFilter === filter || filter === null) {
-      setRadioFilter(null);
-      return;
-    }
-    setRadioFilter(filter);
+  const handleFilterChange = (filter) => {
+    return () => applyFilter(filter);
   };
-
   return (
     <div className="filters">
-      <button className={"checkbox " + (radioFilter === null ? "checked" : "")} onClick={() => handleFilterClick(null)}>
-        Visos
-      </button>
-      <button className={"checkbox " + (radioFilter === "with-money" ? "checked" : "")} onClick={() => handleFilterClick("with-money")}>
-        Kuriose yra pinigų
-      </button>
-      <button className={"checkbox " + (radioFilter === "no-money" ? "checked" : "")} onClick={() => handleFilterClick("no-money")}>
-        Tuščios
-      </button>
+      <div className="filter">
+        <button className="filter-expand-btn accent" onClick={() => setIsExpanded((is) => !is)}>
+          <span>filtras: </span>
+          <span className="dark">{filter ? filter : "visos"}</span>
+          <span className="filter-icon">
+            {" "}
+            <BiExpandHorizontal />
+          </span>
+        </button>
+        {isExpanded && (
+          <div className="filter-selection">
+            {filters.map((f, i) => (
+              <button key={f + i} className={"filter-btn " + (filter === f ? "active" : "")} onClick={handleFilterChange(f)}>
+                {f}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

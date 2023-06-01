@@ -1,0 +1,29 @@
+.filter {
+  width: 100%;
+  min-height: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  .filter-expand-btn {
+    min-width: 210px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    .dark {
+      padding: 0.2em 0.3em;
+      background-color: $dark;
+    }
+  }
+  .filter-btn {
+    padding: 0.3em 0.5em;
+    border: none;
+    border-right: 2px solid $accent;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  .active {
+    color: lighten($dark, 30%);
+    pointer-events: none;
+    cursor: default;
+  }
+}
