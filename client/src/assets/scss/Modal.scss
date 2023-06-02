@@ -12,6 +12,7 @@
   background-color: rgba($accent, 0.7);
   text-align: center;
   z-index: 9;
+  overflow-y: scroll;
   .modal-box {
     width: fit-content;
     max-width: 100%;

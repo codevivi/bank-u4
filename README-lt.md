@@ -54,6 +54,6 @@ Banką sudaro du puslapiai su bendru meniu ir prisijungimo puslapis
 
 - [x] Meniu keičiasi priklausomai ar puslapyje yra prisijungęs vartotojas ar ne. Prisijungusiam vartotojui meniu yra rodomas atsijungimo mygtukas ir jo vardas, o neprisijungusiam- linkas į prisijungimo puslapį.
 
-- [] **Filtravimas ir rūšiavimas turi veikti kartu, tai yra turi būti galimybė išrūšiuoti jau nufiltruotas sąskaitas ir panašiai**.
+- [x] **Filtravimas ir rūšiavimas turi veikti kartu, tai yra turi būti galimybė išrūšiuoti jau nufiltruotas sąskaitas ir panašiai**.
 
 - [x] **Sąskaita turi būti unikali ir nesikartoti** _(tikrinu pagal vardą ir pavardę, nors šiaip žmonių vardai galėtų ir kartotis, bet šiuo atveju daugiau duomenų nėra)_

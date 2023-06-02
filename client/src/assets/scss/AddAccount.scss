@@ -51,6 +51,29 @@
       &[type="file"] {
         text-indent: -6.4em;
         flex: 1;
+        &.invisible {
+          display: none;
+        }
+      }
+    }
+    .img-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: 200px;
+      background-color: lighten($accent, 30%);
+      img {
+        display: block;
+        width: 250px;
+        height: auto;
+        margin: auto;
+      }
+      button.remove-file-btn {
+        position: absolute;
+        top: 0;
+        max-width: 3em;
+        min-width: 3em;
+        height: 3em;
+        right: 0;
       }
     }
   }

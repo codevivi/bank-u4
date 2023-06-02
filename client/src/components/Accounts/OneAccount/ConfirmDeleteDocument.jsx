@@ -1,4 +1,4 @@
-import Modal from "../Modal/Modal";
+import Modal from "../../Modal/Modal";
 
 function ConfirmDeleteDocument({ close, account, handleDeleteDocument }) {
   return (

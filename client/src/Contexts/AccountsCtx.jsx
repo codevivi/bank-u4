@@ -26,6 +26,13 @@ export function AccountsProvider({ children }) {
     resetDisplayAccounts(accounts);
   }, [accounts, resetDisplayAccounts]);
 
+  useEffect(() => {
+    if (accounts === null) {
+      return;
+    }
+    updatePrivateStats();
+  }, [accounts, updatePrivateStats]);
+
   return (
     <AccountsContext.Provider value={{ accounts, setAccounts, displayAccounts, filter, applyFilter, sort, applySort, setNewAccount, setDeleteAccount, setUpdateAccount, changed, privateStats, updatePrivateStats, payTax, setDeleteDocument, modifyOneAccount }}>{children}</AccountsContext.Provider>
   );

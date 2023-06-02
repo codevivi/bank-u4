@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
 import { GlobalContext } from "../../Contexts/GlobalCtx";
 import AddAccount from "./AddAccount";
-import OneAccountRow from "./OneAccountRow";
+import OneAccountRow from "./OneAccount/OneAccountRow.jsx";
 import Filter from "./Filter";
 import AllStats from "./AllStats";
 import Sort from "./Sort";

@@ -1,32 +1,27 @@
 import CurrencyInput from "react-currency-input-field";
 import { useContext, useEffect, useState } from "react";
-import formatCurrency from "../../utils/formatCurrency";
-import { GlobalContext } from "../../Contexts/GlobalCtx";
-import { AccountsContext } from "../../Contexts/AccountsCtx";
+import formatCurrency from "../../../utils/formatCurrency";
+import { GlobalContext } from "../../../Contexts/GlobalCtx";
+import { AccountsContext } from "../../../Contexts/AccountsCtx";
 import ConfirmDelete from "./ConfirmDelete";
-import idPlaceholder from "../../assets/images/id-placeholder.png";
-import ConfirmDeleteDocument from "./ConfirmDeleteDocument";
-import AddDocument from "./AddDocument";
-import EditDocument from "./EditDocument";
+import idPlaceholder from "../../../assets/images/id-placeholder.png";
+import ChangeDocument from "./ChangeDocument";
 import ConfirmLargeSumDeposit from "./ConfirmLargeSumDeposit";
 
 export default function OneAccountRow({ account }) {
   const [newAmount, setNewAmount] = useState(null);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
-  const [confirmDeleteDocumentModalOpen, setConfirmDocumentDeleteModalOpen] = useState(false);
-  const [addDocumentModalOpen, setAddDocumentModalOpen] = useState(false);
-  const [editDocumentModalOpen, setEditDocumentModalOpen] = useState(false);
+  const [changeDocumentModalOpen, setChangeDocumentModalOpen] = useState(false);
   const [confirmLargeSumModalOpen, setConfirmLargeSumModalOpen] = useState(false);
   const [imgUpdateTime, setImgUpdateTime] = useState(null);
   const { addMsg } = useContext(GlobalContext);
-  const { setUpdateAccount, setDeleteAccount, setDeleteDocument } = useContext(AccountsContext);
+  const { setUpdateAccount, setDeleteAccount } = useContext(AccountsContext);
   const [okToAddMoney, setOkToAddMoney] = useState(false);
 
-  const toggleDeleteDocumentModal = () => setConfirmDocumentDeleteModalOpen((openState) => !openState);
   const toggleDeleteAccountModal = () => setConfirmDeleteModalOpen((openState) => !openState);
-  const toggleAddDocumentModal = () => setAddDocumentModalOpen((openState) => !openState);
-  const toggleEditDocumentModal = () => setEditDocumentModalOpen((openState) => !openState);
+  const toggleChangeDocumentModal = () => setChangeDocumentModalOpen((openState) => !openState);
   const toggleLargeSumModal = () => setConfirmLargeSumModalOpen((openState) => !openState);
+
   const cancelAddMoney = () => {
     setNewAmount(null);
     toggleLargeSumModal();
@@ -44,7 +39,7 @@ export default function OneAccountRow({ account }) {
     if (confirmLargeSumModalOpen) {
       toggleLargeSumModal();
     }
-  }, [okToAddMoney, account, addMsg, newAmount, setUpdateAccount]);
+  }, [okToAddMoney, account, addMsg, newAmount, setUpdateAccount, confirmLargeSumModalOpen]);
 
   const changeAmount = (value) => {
     if (value) {
@@ -97,11 +92,6 @@ export default function OneAccountRow({ account }) {
     setUpdateAccount({ old: { ...account }, changed: { blocked: !account.blocked } });
   };
 
-  const handleDeleteDocument = () => {
-    setDeleteDocument({ id: account.documentId, accountId: account.id });
-    toggleDeleteDocumentModal();
-  };
-
   return (
     <li className="account">
       <div className="row">
@@ -125,26 +115,10 @@ export default function OneAccountRow({ account }) {
           <img key={imgUpdateTime} src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
           {!account.blocked && (
             <div className="controls-wrapper">
-              {account.documentId && (
-                <div className="control-box">
-                  <button onClick={toggleEditDocumentModal}>Keisti</button>
-                  {editDocumentModalOpen && <EditDocument close={toggleEditDocumentModal} account={account} updateImg={updateImg} />}
-                </div>
-              )}
-              {!account.documentId && (
-                <div className="control-box">
-                  <button onClick={toggleAddDocumentModal}>Pridėti</button>
-                  {addDocumentModalOpen && <AddDocument close={toggleAddDocumentModal} account={account} />}
-                </div>
-              )}
-              {account.documentId && (
-                <div className="control-box">
-                  <button onClick={toggleDeleteDocumentModal} className="red">
-                    Ištrinti
-                  </button>
-                  {confirmDeleteDocumentModalOpen && <ConfirmDeleteDocument close={toggleDeleteDocumentModal} account={account} handleDeleteDocument={handleDeleteDocument} />}
-                </div>
-              )}
+              <div className="control-box">
+                <button onClick={toggleChangeDocumentModal}>keisti, pridėti ar trinti dokumentą</button>
+                {changeDocumentModalOpen && <ChangeDocument close={toggleChangeDocumentModal} account={account} updateImg={updateImg} imgUpdateTime={imgUpdateTime} />}
+              </div>
             </div>
           )}
         </div>

@@ -10,9 +10,6 @@ const taxUrl = accountsUrl + "/pay-tax";
 function useAccounts() {
   const [accounts, setAccounts] = useState(null);
   const [accountsUpdateTime, setAccountsUpdateTime] = useState(null);
-  // const [displayAccounts, setDisplayAccounts] = useState(accounts);
-  // const [displayAccounts, dispatchDisplayAccounts] = useDisplayAccounts(null);
-  // const [filterFunc, setFilterFunc] = useState(null);
 
   const [newAccount, setNewAccount] = useState(null);
   const [deleteAccount, setDeleteAccount] = useState(null);
@@ -27,17 +24,11 @@ function useAccounts() {
     setTaxPayTime(Date.now());
   }, []);
 
-  // const sortBySurname = (accounts) => {
-  //   return accounts.sort((a, b) => a.surname.localeCompare(b.surname, "lt", { sensitivity: "base" }));
-  // };
-
   const modifyOneAccount = useCallback((modified) => {
     setAccounts((prev) => {
       return prev.map((acc) => (acc.id === modified.id ? { ...acc, ...modified } : acc));
     });
   }, []);
-
-  // use sorted and filtered accounts for display if filter function set
 
   useEffect(() => {
     if (taxPayTime === null) {

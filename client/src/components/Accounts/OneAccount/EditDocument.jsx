@@ -1,9 +1,9 @@
 import { useContext, useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { AccountsContext } from "../../Contexts/AccountsCtx";
-import { SERVER_BASE_PATH } from "../../utils/config";
-import Modal from "../Modal/Modal";
-import { GlobalContext } from "../../Contexts/GlobalCtx";
+import { AccountsContext } from "../../../Contexts/AccountsCtx";
+import { SERVER_BASE_PATH } from "../../../utils/config";
+import Modal from "../../Modal/Modal";
+import { GlobalContext } from "../../../Contexts/GlobalCtx";
 
 const url = SERVER_BASE_PATH + "/documents";
 

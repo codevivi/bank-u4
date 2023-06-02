@@ -1,11 +1,13 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useState } from "react";
 import { AccountsContext } from "../../Contexts/AccountsCtx";
 import Modal from "../Modal/Modal";
+import { GlobalContext } from "../../Contexts/GlobalCtx";
+import idPlaceholder from "../../assets/images/id-placeholder.png";
 
 export default function AddAccount({ setAddAccountModalOpen }) {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
-  const documentFile = useRef();
+  const { fileInput, inputFileForDisplay, readInputFile, removeInputFile } = useContext(GlobalContext);
 
   const { setNewAccount } = useContext(AccountsContext);
 
@@ -34,17 +36,22 @@ export default function AddAccount({ setAddAccountModalOpen }) {
     setSurname((surname) => surname.trim());
 
     if (name && surname) {
-      setNewAccount({ account: { name, surname, money: 0 }, document: documentFile.current.files[0] ? documentFile.current.files[0] : null });
+      setNewAccount({ account: { name, surname, money: 0 }, document: fileInput.current.files[0] ? fileInput.current.files[0] : null });
 
       setName("");
       setSurname("");
+      removeInputFile();
       setAddAccountModalOpen(false);
       return;
     }
   }
+  function closeAndClear() {
+    removeInputFile();
+    setAddAccountModalOpen(false);
+  }
 
   return (
-    <Modal close={() => setAddAccountModalOpen(false)} title={"Sukurti naują sąskaitą"}>
+    <Modal close={closeAndClear} title={"Sukurti naują sąskaitą"}>
       <form onSubmit={handleForm} className="add-account">
         <div>
           <label htmlFor="name">Vardas</label>
@@ -55,10 +62,19 @@ export default function AddAccount({ setAddAccountModalOpen }) {
           <input id="surname" onChange={handleSurnameChange} required minLength={2} maxLength={30} name="surname" value={surname} type="text" />
         </div>
         <div>
-          <label htmlFor="document">Įkelti dokumento kopiją jpeg formatu</label>
-          <input id="document" ref={documentFile} name="document" type="file" accept="image/jpeg" />
+          <label htmlFor="document">{inputFileForDisplay ? "Pakeisti" : "Įkelti dokumento kopiją jpeg formatu"}</label>
+          <input className={!inputFileForDisplay ? "invisible" : ""} id="document" onChange={readInputFile} name="document" type="file" accept="image/jpeg" />
+          {!inputFileForDisplay && <p>Failas nepasirinktas</p>}
+          <div className="img-wrapper">
+            {inputFileForDisplay && (
+              <button type="button" onClick={removeInputFile} className="red remove-file-btn" aria-label="panaikinti documentą">
+                &#x292C;
+              </button>
+            )}
+            <img width={250} src={inputFileForDisplay ? inputFileForDisplay : idPlaceholder} alt="chosen document copy" />
+          </div>
         </div>
-        <button>Sukurti</button>
+        <button type="submit">Sukurti</button>
       </form>
     </Modal>
   );
