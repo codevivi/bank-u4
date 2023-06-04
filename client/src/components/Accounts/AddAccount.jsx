@@ -36,7 +36,7 @@ export default function AddAccount({ setAddAccountModalOpen }) {
     setSurname((surname) => surname.trim());
 
     if (name && surname) {
-      setNewAccount({ account: { name, surname, money: 0 }, document: fileInput.current.files[0] ? fileInput.current.files[0] : null });
+      setNewAccount({ account: { name, surname, money: 0 }, document: fileInput?.current?.files[0] ? fileInput.current.files[0] : null });
 
       setName("");
       setSurname("");
