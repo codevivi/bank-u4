@@ -35,7 +35,7 @@ function usePrivateStats(addMsg) {
         }
         addMsg({ type: "error", text: "Serverio klaida, nepavyko gauti statistikos" });
       });
-  }, [statsUpdateTime, addMsg, auth]);
+  }, [statsUpdateTime, addMsg, auth, navigate]);
 
   return [privateStats, updatePrivateStats];
 }

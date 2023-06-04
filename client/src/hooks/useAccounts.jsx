@@ -142,6 +142,10 @@ function useAccounts() {
           setMessage({ type: "error", text: `Esate neprisijungęs. Atsiprašome, įvyko klaida panaikinant sąskaitą (${deleteAccount.name} ${deleteAccount.surname})` });
           return;
         }
+        if (res.status === 403) {
+          setMessage({ type: "error", text: `Sąskaita užblokuota. Įvyko klaida panaikinant sąskaitą (${deleteAccount.name} ${deleteAccount.surname})` });
+          return;
+        }
         setMessage({ type: "error", text: `Atsiprašome, įvyko klaida panaikinant sąskaitą (${deleteAccount.name} ${deleteAccount.surname})` });
       });
   }, [deleteAccount]);
@@ -172,6 +176,10 @@ function useAccounts() {
           setMessage({ type: "error", text: `Esate Neprisijungęs. Atsiprašome, įvyko klaida išsaugant sąskaitos (${updateAccount.old.name} ${updateAccount.old.surname}) pakeitimus` });
           return;
         }
+        if (res.status === 403) {
+          setMessage({ type: "error", text: `Sąskaita užblokuota. Įvyko klaida išsaugant sąskaitos (${updateAccount.old.name} ${updateAccount.old.surname}) pakeitimus` });
+          return;
+        }
         setMessage({ type: "error", text: `Atsiprašome, įvyko klaida išsaugant sąskaitos (${updateAccount.old.name} ${updateAccount.old.surname}) pakeitimus` });
       });
   }, [updateAccount]);
@@ -194,6 +202,10 @@ function useAccounts() {
         const res = e.response;
         if (res.status === 401) {
           setMessage({ type: "error", text: `Esate neprisijungęs. Atsiprašome, įvyko klaida panaikinant dokumentą` });
+          return;
+        }
+        if (res.status === 403) {
+          setMessage({ type: "error", text: `Įvyko klaida panaikinant dokumentą. Sąskaita užblokuota.` });
           return;
         }
         setMessage({ type: "error", text: `Atsiprašome, įvyko klaida panaikinant dokumentą` });
