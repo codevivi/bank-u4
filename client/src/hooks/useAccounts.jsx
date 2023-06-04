@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
 import { SERVER_BASE_PATH } from "../utils/config.js";
@@ -19,6 +20,7 @@ function useAccounts() {
   const [changed, setChanged] = useState(false);
 
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const payTax = useCallback(() => {
     setTaxPayTime(Date.now());
@@ -52,9 +54,10 @@ function useAccounts() {
         }
         if (res.status === 401) {
           setMessage({ type: "error", text: `Esate neprisijungęs` });
+          navigate("/login");
         }
       });
-  }, [taxPayTime]);
+  }, [taxPayTime, navigate]);
 
   // get from db
   useEffect(() => {
@@ -74,9 +77,10 @@ function useAccounts() {
         }
         if (res.status === 401) {
           setMessage({ type: "error", text: `Esate neprisijungęs` });
+          navigate("/login");
         }
       });
-  }, [accountsUpdateTime]);
+  }, [accountsUpdateTime, navigate]);
 
   // CREATE add account to db
   useEffect(() => {
@@ -108,6 +112,8 @@ function useAccounts() {
         setAccounts((accounts) => accounts.filter((account) => account.promiseId !== promiseId));
         if (e.response.status === 409) {
           setMessage({ type: "error", text: `Sąskaia ${newAccount.account.name} ${newAccount.account.surname} jau egzistuoja.` });
+        } else if (e.response.status === 401) {
+          setMessage({ type: "error", text: `Esate neprisijungęs` });
         } else {
           setMessage({ type: "error", text: `Atsiprašome, įvyko serverio klaida kuriant sąskaitą (${newAccount.account.name} ${newAccount.account.surname})` });
         }
@@ -130,8 +136,12 @@ function useAccounts() {
         setChanged(Date.now());
       })
       .catch((e) => {
-        console.log(e);
         setAccounts((accounts) => [...accounts, { ...deleteAccount }]);
+        const res = e.response;
+        if (res.status === 401) {
+          setMessage({ type: "error", text: `Esate neprisijungęs. Atsiprašome, įvyko klaida panaikinant sąskaitą (${deleteAccount.name} ${deleteAccount.surname})` });
+          return;
+        }
         setMessage({ type: "error", text: `Atsiprašome, įvyko klaida panaikinant sąskaitą (${deleteAccount.name} ${deleteAccount.surname})` });
       });
   }, [deleteAccount]);
@@ -156,6 +166,12 @@ function useAccounts() {
       .catch((e) => {
         //if save edit in server did not happen restore previous account
         setAccounts((accounts) => accounts.map((account) => (account.promiseId === promiseId ? { ...updateAccount.old } : { ...account })));
+
+        const res = e.response;
+        if (res.status === 401) {
+          setMessage({ type: "error", text: `Esate Neprisijungęs. Atsiprašome, įvyko klaida išsaugant sąskaitos (${updateAccount.old.name} ${updateAccount.old.surname}) pakeitimus` });
+          return;
+        }
         setMessage({ type: "error", text: `Atsiprašome, įvyko klaida išsaugant sąskaitos (${updateAccount.old.name} ${updateAccount.old.surname}) pakeitimus` });
       });
   }, [updateAccount]);
@@ -175,7 +191,11 @@ function useAccounts() {
         setMessage({ type: "success", text: `Dokumentas ištrintas` });
       })
       .catch((e) => {
-        console.log(e);
+        const res = e.response;
+        if (res.status === 401) {
+          setMessage({ type: "error", text: `Esate neprisijungęs. Atsiprašome, įvyko klaida panaikinant dokumentą` });
+          return;
+        }
         setMessage({ type: "error", text: `Atsiprašome, įvyko klaida panaikinant dokumentą` });
       });
   }, [deleteDocument]);

@@ -11,7 +11,7 @@ const NEGATIVE = 14;
 const POSITIVE = 15;
 //sorts
 const UNSORTED = 100;
-const NAME = 101;
+// const NAME = 101;
 const SURNAME = 102;
 const MONEY = 103;
 
@@ -27,7 +27,7 @@ export const filters = [
 export const sorts = [
   { key: UNSORTED, text: "ne rūšiuotos" },
   { key: SURNAME, text: "pagal pavardę" },
-  { key: NAME, text: "pagal vardą" },
+  // { key: NAME, text: "pagal vardą" },
   { key: MONEY, text: "pagal sumą" },
 ];
 
@@ -70,9 +70,9 @@ export const displayAccountsReducer = (state, action) => {
 
   if (action.type === SORT) {
     switch (action.sort) {
-      case NAME:
-        s.sort((a, b) => a.name.localeCompare(b.name, "lt", { sensitivity: "base" }));
-        break;
+      // case NAME:
+      // s.sort((a, b) => a.name.localeCompare(b.name, "lt", { sensitivity: "base" }));
+      // break;
       case SURNAME:
         s.sort((a, b) => a.surname.localeCompare(b.surname, "lt", { sensitivity: "base" }));
         break;

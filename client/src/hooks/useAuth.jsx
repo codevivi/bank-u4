@@ -24,8 +24,12 @@ function useAuth(addMsg) {
         setAuth({ user: res.data.user });
       })
       .catch((e) => {
-        console.log(e);
-        addMsg({ type: "error", text: "Klaida atnaujinant prisijugimo būseną." });
+        const res = e.response;
+        if (res?.status === 401) {
+          addMsg({ type: "error", text: `Esate neprisijungęs` });
+          return;
+        }
+        addMsg({ type: "error", text: "Serverio Klaida atnaujinant prisijugimo būseną." });
       });
   }, [authCheckTime, addMsg]);
 
