@@ -4,16 +4,16 @@ import formatCurrency from "../../../utils/formatCurrency";
 import { GlobalContext } from "../../../Contexts/GlobalCtx";
 import { AccountsContext } from "../../../Contexts/AccountsCtx";
 import ConfirmDelete from "./ConfirmDelete";
-import idPlaceholder from "../../../assets/images/id-placeholder.png";
 import ChangeDocument from "./ChangeDocument";
 import ConfirmLargeSumDeposit from "./ConfirmLargeSumDeposit";
+import DocumentImg from "./DocumentImg";
 
 export default function OneAccountRow({ account }) {
   const [newAmount, setNewAmount] = useState(null);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
   const [changeDocumentModalOpen, setChangeDocumentModalOpen] = useState(false);
   const [confirmLargeSumModalOpen, setConfirmLargeSumModalOpen] = useState(false);
-  const [imgUpdateTime, setImgUpdateTime] = useState(null);
+  const [imgUpdateTime, setImgUpdateTime] = useState(Date.now());
   const { addMsg } = useContext(GlobalContext);
   const { setUpdateAccount, setDeleteAccount } = useContext(AccountsContext);
   const [okToAddMoney, setOkToAddMoney] = useState(false);
@@ -112,23 +112,26 @@ export default function OneAccountRow({ account }) {
       <div className="row">
         <div className="field document">
           <h2>Dokumentas</h2>
-          <img key={imgUpdateTime} src={account.documentId ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={account.documentId ? account.name + " " + account.surname + " dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
-          {!account.blocked && (
-            <div className="controls-wrapper">
-              <div className="control-box">
-                <button onClick={toggleChangeDocumentModal}>keisti, pridėti ar trinti dokumentą</button>
-                {changeDocumentModalOpen && <ChangeDocument close={toggleChangeDocumentModal} account={account} updateImg={updateImg} imgUpdateTime={imgUpdateTime} />}
-              </div>
+          <DocumentImg account={account} hash={imgUpdateTime} />
+          {/* {!account.blocked && ( */}
+          <div className="controls-wrapper">
+            <div className="control-box">
+              <button className={account.blocked ? "disabled" : null} onClick={toggleChangeDocumentModal}>
+                keisti, pridėti ar trinti dokumentą
+                {account.blocked && <span className="inline-msg red">Veiksmas negalimas, sąskaita užblokuota</span>}
+              </button>
+              {changeDocumentModalOpen && <ChangeDocument close={toggleChangeDocumentModal} account={account} updateImg={updateImg} imgUpdateTime={imgUpdateTime} />}
             </div>
-          )}
+          </div>
+          {/* )} */}
         </div>
       </div>
       <div className="row">
         <div className="field money-actions">
           <h2>Lėšų valdymas</h2>
           {confirmLargeSumModalOpen && <ConfirmLargeSumDeposit close={cancelAddMoney} sum={newAmount} account={account} handleConfirm={() => setOkToAddMoney(true)} />}
-          {!account.blocked && (
-            <div className="controls-wrapper">
+          <div className="controls-wrapper">
+            {!account.blocked && (
               <div className="control-box">
                 <CurrencyInput
                   className="currency-input"
@@ -145,21 +148,24 @@ export default function OneAccountRow({ account }) {
                   value={newAmount || ""}
                   onValueChange={(value) => changeAmount(value)}></CurrencyInput>
               </div>
-              <div className="control-box">
-                <button className={`green ${account.promiseId ? "disabled" : ""}`} onClick={addMoneyToAccount}>
-                  {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
-                  pridėti lėšų
-                </button>
-              </div>
-              <div className="control-box">
-                <button className={`orange ${Number(account.money) < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
-                  {!newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
-                  {Number(account.money) < newAmount && <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span>}
-                  nuskaičiuoti lėšas
-                </button>
-              </div>
+            )}
+            <div className="control-box">
+              <button className={`green ${account.promiseId || account.blocked ? "disabled" : ""}`} onClick={addMoneyToAccount}>
+                {account.blocked ? <span className="inline-msg red">Veiksmas negalimas, sąskaita užblokuota</span> : null}
+                {!account.blocked && !newAmount && <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span>}
+                pridėti lėšų
+              </button>
             </div>
-          )}
+            <div className="control-box">
+              <button className={`orange ${account.blocked || Number(account.money) < newAmount || account.promiseId ? "disabled" : ""}`} onClick={subtractMoneyFromAccount}>
+                {account.blocked ? <span className="inline-msg red">Veiksmas negalimas, sąskaita užblokuota</span> : null}
+                {!account.blocked && !newAmount ? <span className="inline-msg">{account.promiseId ? "Wait..." : "Įrašykite sumą"}</span> : null}
+                {!account.blocked && Number(account.money) < newAmount ? <span className="inline-msg red">Negalima nuskaičiuoti daugiau nei yra sąskaitoje.</span> : null}
+                nuskaičiuoti lėšas
+              </button>
+            </div>
+          </div>
+          {/* )} */}
         </div>
       </div>
 
@@ -174,15 +180,14 @@ export default function OneAccountRow({ account }) {
               </button>
             </div>
 
-            {!account.blocked && (
-              <div className="control-box">
-                <button className={`red ${Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={toggleDeleteAccountModal}>
-                  {Number(account.money) > 0 && <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span>}
-                  ištrinti
-                </button>
-                {confirmDeleteModalOpen && <ConfirmDelete close={toggleDeleteAccountModal} handleDelete={handleDelete} account={account} />}
-              </div>
-            )}
+            <div className="control-box">
+              <button className={`red ${account.blocked || Number(account.money) > 0 || account.promiseId ? "disabled" : ""}`} onClick={toggleDeleteAccountModal}>
+                {account.blocked ? <span className="inline-msg red">Veiksmas negalimas, sąskaita užblokuota</span> : null}
+                {!account.blocked && Number(account.money) > 0 ? <span className="inline-msg red">Negalima ištrinti sąskaitos kurioje yra pinigų.</span> : null}
+                ištrinti
+              </button>
+              {confirmDeleteModalOpen && <ConfirmDelete close={toggleDeleteAccountModal} handleDelete={handleDelete} account={account} />}
+            </div>
           </div>
         </div>
       </div>

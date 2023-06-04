@@ -37,7 +37,7 @@ export default function ChangeDocument({ close, account, updateImg, imgUpdateTim
     formData.append("document", editDocument.file);
     formData.append("id", editDocument.id);
     axios
-      .put(url + "/" + editDocument.id, formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
+      .put(url + "/" + editDocument.id + "/" + editDocument.accountId, formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } })
       .then((res) => {
         if (res.data.type !== "success") {
           throw new Error(res.data.message || "unknown");
@@ -47,8 +47,14 @@ export default function ChangeDocument({ close, account, updateImg, imgUpdateTim
         close();
       })
       .catch((e) => {
-        console.log(e);
-        addMsg({ type: "error", text: `Atsiprašome, įvyko serverio klaida keičiant dokumentą` });
+        const res = e.response;
+        if (res.status === 401) {
+          addMsg({ type: "error", text: `Esate neprisijungęs. Atsiprašome, įvyko klaida keičiant dokumentą` });
+        } else if (res.status === 403) {
+          addMsg({ type: "error", text: `Sąskaita užblokuota. Atsiprašome, įvyko klaida keičiant dokumentą` });
+        } else {
+          addMsg({ type: "error", text: `Atsiprašome, įvyko serverio klaida keičiant dokumentą` });
+        }
         close();
       });
   }, [editDocument, addMsg, modifyOneAccount, updateImg, close]);
@@ -71,8 +77,14 @@ export default function ChangeDocument({ close, account, updateImg, imgUpdateTim
         close();
       })
       .catch((e) => {
-        console.log(e);
-        addMsg({ type: "error", text: `Atsiprašome, įvyko serverio klaida pridedant dokumentą` });
+        const res = e.response;
+        if (res.status === 401) {
+          addMsg({ type: "error", text: `Esate neprisijungęs. Atsiprašome, įvyko klaida pridedant dokumentą` });
+        } else if (res.status === 403) {
+          addMsg({ type: "error", text: `Įvyko klaida pridedant dokumentą. Sąskaita užblokuota.` });
+        } else {
+          addMsg({ type: "error", text: `Atsiprašome, įvyko serverio klaida pridedant dokumentą` });
+        }
         close();
       });
   }, [newDocument, addMsg, modifyOneAccount, close]);
@@ -81,7 +93,7 @@ export default function ChangeDocument({ close, account, updateImg, imgUpdateTim
     e.preventDefault();
     if (!account.documentId && inputFileForDisplay) {
       return handleAddDocument();
-    } else if (account.documentId && !isKeepRealFile) {
+    } else if (account.documentId && !isKeepRealFile && !inputFileForDisplay) {
       handleDeleteDocument();
     } else if (account.documentId && inputFileForDisplay) {
       return handleEditDocument();
@@ -102,7 +114,10 @@ export default function ChangeDocument({ close, account, updateImg, imgUpdateTim
           {!inputFileForDisplay && <p>Naujas Failas nepasirinktas</p>}
 
           <div className="img-wrapper">
-            {!inputFileForDisplay && <img key={imgUpdateTime} src={isKeepRealFile ? "http://localhost:5000/api/documents/" + account.documentId : idPlaceholder} width={100} alt={isKeepRealFile ? account.name + " " + account.surname + " dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />}
+            {/* {!inputFileForDisplay && <DocumentImg account={account} hash={imgUpdateTime} />} */}
+            {!inputFileForDisplay && (
+              <img src={isKeepRealFile ? "http://localhost:5000/api/documents/" + account.documentId + "/" + imgUpdateTime : idPlaceholder} width={100} alt={isKeepRealFile ? account.name + " " + account.surname + " dokumento kopija" : "dokumento kopijos nėra paveiksliukas"} />
+            )}
             {isKeepRealFile && !inputFileForDisplay && (
               <button onClick={() => setIsKeepRealFile(false)} className="red remove-file-btn">
                 &#x292C;

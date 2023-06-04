@@ -46,6 +46,13 @@ export const removeDocument = async (req, res, next) => {
 
 export const addDocument = async (req, res, next) => {
   try {
+    const account = await accountsModel.getById(req.body.accountId);
+    if (account.blocked) {
+      return res.status(403).json({
+        type: "error",
+        message: "Account blocked",
+      });
+    }
     let documentId = null;
     documentId = await documentsModel.add({ filename: req.file.filename, accountId: req.body.accountId });
     res.status(200).json({
@@ -63,8 +70,13 @@ export const addDocument = async (req, res, next) => {
 /// this is middleware but left there as it needs to access documents model;
 export const removeFileFromFs = async (req, res, next) => {
   try {
-    let document = null;
-    document = await documentsModel.getById(req.params.id);
+    const [document, account] = await Promise.all([documentsModel.getById(req.params.id), accountsModel.getById(req.params.accountId)]);
+    if (account.blocked) {
+      return res.status(403).json({
+        type: "error",
+        message: "Account blocked",
+      });
+    }
     req.session.filename = document.filename; //as want to use same name for new upload
     fs.unlink(path.resolve("uploads", document.filename), (err) => {
       if (err) {
